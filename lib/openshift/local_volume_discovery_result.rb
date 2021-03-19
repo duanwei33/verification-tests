@@ -6,13 +6,13 @@ module BushSlicer
   class LocalVolumeDiscoveryResult < ProjectResource
     RESOURCE="localvolumediscoveryresults.local.storage.openshift.io"
 
-    def discovered_devices(user: nil, quiet: false, cached: true)
+    def discovered_devices(user: nil, quiet: false, cached: false)
       rr = raw_resource(user: user, quiet: quiet, cached: cached).dig('status', 'discoveredDevices')
       rr.map { |d| DiscoveredDevices.new d }
     end
 
     # @return [Array of `available` DiscoveredDevice]
-    def available_devices(user: nil, quiet: false, cached: true)
+    def available_devices(user: nil, quiet: false, cached: false)
       devices = discovered_devices(user: user, quiet: quiet, cached: cached)
       devices.select { |d| d.status == 'Available'}
     end
