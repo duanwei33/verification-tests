@@ -3,6 +3,9 @@ Feature: ServiceAccount and Policy Managerment
   # @author anli@redhat.com
   # @case_id OCP-10642
   @aws-ipi
+  @gcp-upi
+  @gcp-ipi
+  @4.9
   Scenario: Could grant admin permission for the service account username to access to its own project
     Given I have a project
     When I create a new application with:
@@ -33,6 +36,9 @@ Feature: ServiceAccount and Policy Managerment
   # @case_id OCP-11494
   @aws-ipi
   @proxy
+  @gcp-upi
+  @gcp-ipi
+  @4.9
   Scenario: Could grant admin permission for the service account group to access to its own project
     Given I have a project
     When I run the :new_app client command with:
@@ -68,6 +74,9 @@ Feature: ServiceAccount and Policy Managerment
   # @author wjiang@redhat.com
   # @case_id OCP-11249
   @aws-ipi
+  @gcp-upi
+  @gcp-ipi
+  @4.9
   Scenario: User can get the serviceaccount token via client
     Given I have a project
     When I run the :serviceaccounts_get_token client command with:

@@ -4,6 +4,9 @@ Feature: Operator related networking scenarios
   # @case_id OCP-22704
   @admin
   @aws-ipi
+  @gcp-upi
+  @gcp-ipi
+  @4.9
   Scenario: The clusteroperator should be able to reflect the network operator version corresponding to the OCP version
 
     Given the master version > "3.11"
@@ -19,6 +22,7 @@ Feature: Operator related networking scenarios
   # @case_id OCP-22706
   @admin
   @destructive
+  @4.9
   Scenario: The clusteroperator should be able to reflect the correct version field post bad network operator config
 
     Given the master version >= "4.1"
@@ -61,6 +65,9 @@ Feature: Operator related networking scenarios
   # @case_id OCP-22201
   @admin
   @aws-ipi
+  @gcp-upi
+  @gcp-ipi
+  @4.9
   Scenario: Should have a clusteroperator object created under config.openshift.io api group for network-operator
     Given the master version >= "4.1"
     # Check the operator object has version
@@ -162,6 +169,9 @@ Feature: Operator related networking scenarios
   @admin
   @destructive
   @aws-ipi
+  @gcp-upi
+  @gcp-ipi
+  @4.9
   Scenario: Service should not get unidle when config flag is disabled under CNO
     Given I have a project
     Given I obtain test data file "networking/list_for_pods.json"
@@ -243,6 +253,9 @@ Feature: Operator related networking scenarios
   @admin
   @destructive
   @aws-ipi
+  @gcp-upi
+  @gcp-ipi
+  @4.9
   Scenario: Should not allow to change the openshift-sdn config
     #Trying to change network mode to Subnet or any other
     Given as admin I successfully merge patch resource "networks.operator.openshift.io/cluster" with:
@@ -273,6 +286,7 @@ Feature: Operator related networking scenarios
   # @case_id OCP-25856
   @admin
   @destructive
+  @4.9
   Scenario: CNO should delete non-relevant resources
     # Make sure that the multus is Running
     Given the multus is enabled on the cluster
@@ -351,6 +365,7 @@ Feature: Operator related networking scenarios
   # @case_id OCP-27333
   @admin
   @destructive
+  @4.9
   Scenario: Changing mtu in CNO should not be allowed
     Given the mtu value "1750" is patched in CNO config according to the networkType
     And admin uses the "openshift-network-operator" project

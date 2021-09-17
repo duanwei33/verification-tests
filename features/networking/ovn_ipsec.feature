@@ -4,6 +4,9 @@ Feature: OVNKubernetes IPsec related networking scenarios
   # @case_id OCP-38846
   @admin
   @aws-ipi
+  @gcp-upi
+  @gcp-ipi
+  @4.9
   Scenario: Should be able to send node to node ESP traffic on IPsec clusters	
     Given the env is using "OVNKubernetes" networkType
     And the IPsec is enabled on the cluster
@@ -47,6 +50,9 @@ Feature: OVNKubernetes IPsec related networking scenarios
   @admin
   @destructive
   @aws-ipi
+  @gcp-upi
+  @gcp-ipi
+  @4.9
   Scenario: Segfault on pluto IKE daemon should result in restarting pluto daemon and corresponding ovn-ipsec pod
     Given the env is using "OVNKubernetes" networkType
     And the IPsec is enabled on the cluster
@@ -73,6 +79,7 @@ Feature: OVNKubernetes IPsec related networking scenarios
   # @author anusaxen@redhat.com
   # @case_id OCP-37591
   @admin
+  @4.9
   Scenario: Make sure IPsec SA's are establishing in a transport mode
     Given the env is using "OVNKubernetes" networkType
     And the IPsec is enabled on the cluster
@@ -87,6 +94,9 @@ Feature: OVNKubernetes IPsec related networking scenarios
   # @case_id OCP-39216
   @admin
   @aws-ipi
+  @gcp-upi
+  @gcp-ipi
+  @4.9
   Scenario: Pod created on IPsec cluster should have appropriate MTU size to accomdate IPsec Header
     Given the env is using "OVNKubernetes" networkType
     And the IPsec is enabled on the cluster
@@ -105,6 +115,7 @@ Feature: OVNKubernetes IPsec related networking scenarios
   # @case_id OCP-37590
   @admin
   @destructive	
+  @4.9
   Scenario: Delete all ovn-ipsec containers and check if they gets recreated
     Given the env is using "OVNKubernetes" networkType
     And the IPsec is enabled on the cluster
@@ -118,6 +129,7 @@ Feature: OVNKubernetes IPsec related networking scenarios
   # @author anusaxen@redhat.com
   # @case_id OCP-37392
   @admin
+  @4.9
   Scenario: pod to pod traffic on different nodes should be ESP encrypted
     Given the env is using "OVNKubernetes" networkType
     And the IPsec is enabled on the cluster

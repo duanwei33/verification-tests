@@ -3,6 +3,9 @@ Feature: Testing timeout route
   # @author yadu@redhat.com
   # @case_id OCP-11635
   @aws-ipi
+  @gcp-upi
+  @gcp-ipi
+  @4.9
   Scenario: Set timeout server for passthough route
     Given I have a project
     And I store an available router IP in the :router_ip clipboard

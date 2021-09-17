@@ -3,6 +3,9 @@ Feature: All in one volume
   # @author chezhang@redhat.com
   # @case_id OCP-11683
   @aws-ipi
+  @gcp-upi
+  @gcp-ipi
+  @4.9
   Scenario: Project secrets, configmap and downward API into the same volume with normal keys and path
     Given I have a project
     Given I obtain test data file "pods/allinone-volume/configmap.yaml"

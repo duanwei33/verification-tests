@@ -70,6 +70,9 @@ Feature: rhel8images.feature
   @admin
   @aws-ipi
   @proxy
+  @gcp-upi
+  @gcp-ipi
+  @4.9
   Scenario: mysql persistent template
     Given I have a project
     When I run the :tag admin command with:
@@ -122,6 +125,7 @@ Feature: rhel8images.feature
   # @case_id OCP-22958
   @admin
   @proxy
+  @4.9
   Scenario: Create mysql service from imagestream via oc new-app mysql-rhel8 image
     Given I have a project
     When I run the :new_app client command with:

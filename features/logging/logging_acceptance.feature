@@ -4,7 +4,11 @@ Feature: Logging smoke test case
   # @case_id OCP-37508
   @admin
   @aws-ipi
-  @console
+  @serial
+  @prow_unstable
+  @gcp-upi
+  @gcp-ipi
+  @4.9
   Scenario: One logging acceptance case for all cluster
     # Deploy cluster-logging operator via web console
     Given logging service is removed successfully
@@ -26,6 +30,7 @@ Feature: Logging smoke test case
       | update_channel    | <%= cb.clo_channel %> |
       | install_mode      | OwnNamespace          |
       | approval_strategy | Automatic             |
+    Then I wait for the "openshift-logging" project to appear
     Given cluster logging operator is ready
     # subscribe elasticsearch-operator
     When I perform the :goto_operator_subscription_page web action with:
@@ -38,6 +43,7 @@ Feature: Logging smoke test case
       | install_mode      | AllNamespace         |
       | approval_strategy | Automatic            |
     Then the step should succeed
+    Then I wait for the "openshift-operators-redhat" project to appear
     Given elasticsearch operator is ready in the "openshift-operators-redhat" namespace
     Then I use the "openshift-logging" project
     And default storageclass is stored in the :default_sc clipboard

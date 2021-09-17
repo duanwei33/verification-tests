@@ -6,6 +6,8 @@ Feature: Kibana related features
   @admin
   @destructive
   @commonlogging
+  @gcp-upi
+  @gcp-ipi
   Scenario: Show logs on Kibana web console according to different user role
     Given I switch to the first user
     Given I create a project with non-leading digit name
@@ -59,6 +61,9 @@ Feature: Kibana related features
   @destructive
   @commonlogging
   @aws-ipi
+  @gcp-upi
+  @gcp-ipi
+  @4.9
   Scenario: Normal User can only view logs out of the projects owned by himself --kibana
     Given I switch to the first user
     And I create a project with non-leading digit name
@@ -111,6 +116,9 @@ Feature: Kibana related features
   @destructive
   @commonlogging
   @aws-ipi
+  @gcp-upi
+  @gcp-ipi
+  @4.9
   Scenario: User with cluster-admin role can show logs out of all projects -- kibana
     Given I switch to the first user
     Given I create a project with non-leading digit name
@@ -168,6 +176,8 @@ Feature: Kibana related features
   @admin
   @destructive
   @commonlogging
+  @gcp-upi
+  @gcp-ipi
   Scenario: Kibana logout function should log off user
     Given the master version < "4.5"
     Given I switch to the first user

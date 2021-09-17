@@ -25,6 +25,9 @@ Feature: basic verification for upgrade testing
   @upgrade-check
   @admin
   @aws-ipi
+  @gcp-upi
+  @gcp-ipi
+  @4.9
   Scenario: etcd-operator and cluster works well after upgrade
     Given I switch to cluster admin pseudo user
     When I use the "openshift-operators" project
@@ -36,6 +39,9 @@ Feature: basic verification for upgrade testing
   @upgrade-check
   @admin
   @aws-ipi
+  @gcp-upi
+  @gcp-ipi
+  @4.9
   Scenario: Check etcd image have been udpated to target release value after upgrade
     # operands
     Given I switch to cluster admin pseudo user

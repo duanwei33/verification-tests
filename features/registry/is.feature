@@ -4,6 +4,8 @@ Feature: Testing imagestream
   # @case_id OCP-13895
   @destructive
   @admin
+  @gcp-upi
+  @gcp-ipi
   Scenario: Should prune the extenal image correctly
     Given default registry service ip is stored in the :registry_hostname clipboard
     Given I have a project
@@ -91,6 +93,9 @@ Feature: Testing imagestream
   @destructive
   @admin
   @aws-ipi
+  @gcp-upi
+  @gcp-ipi
+  @4.9
   Scenario: Prune images when DC reference to invalid image
     Given I have a project
     Given I enable image-registry default route
@@ -134,6 +139,9 @@ Feature: Testing imagestream
   @destructive
   @admin
   @aws-ipi
+  @gcp-upi
+  @gcp-ipi
+  @4.9
   Scenario: Do not prune layer of a valid Image due to minimum aging
     Given I have a project
     Given I enable image-registry default route

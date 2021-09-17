@@ -5,6 +5,8 @@ Feature: Machine features testing
   @smoke
   @admin
   @aws-ipi
+  @gcp-ipi
+  @4.9
   Scenario: Machines should be linked to nodes
     Given I have an IPI deployment
     Then the machines should be linked to nodes
@@ -13,6 +15,7 @@ Feature: Machine features testing
   # @case_id OCP-22115
   @smoke
   @admin
+  @4.9
   Scenario: machine-api clusteroperator should be in Available state
     Given evaluation of `cluster_operator('machine-api').condition(type: 'Available')` is stored in the :co_available clipboard
     Then the expression should be true> cb.co_available["status"]=="True"
@@ -31,6 +34,9 @@ Feature: Machine features testing
   @smoke
   @admin
   @aws-ipi
+  @gcp-upi
+  @gcp-ipi
+  @4.9
   Scenario: Baremetal clusteroperator should be disabled in any deployment that is not baremetal
     Given evaluation of `cluster_operator('baremetal').condition(type: 'Disabled')` is stored in the :co_disabled clipboard
     Then the expression should be true> cb.co_disabled["status"]=="True"
@@ -40,6 +46,8 @@ Feature: Machine features testing
   @admin
   @destructive
   @aws-ipi
+  @gcp-ipi
+  @4.9
   Scenario: Scale up and scale down a machineSet
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
@@ -60,6 +68,8 @@ Feature: Machine features testing
   # @author jhou@redhat.com
   @admin
   @aws-ipi
+  @gcp-ipi
+  @4.9
   Scenario Outline: Metrics is exposed on https
     Given I switch to cluster admin pseudo user
     And I use the "openshift-monitoring" project
@@ -86,6 +96,8 @@ Feature: Machine features testing
   @admin
   @destructive
   @aws-ipi
+  @gcp-ipi
+  @4.9
   Scenario: Machine should have immutable field providerID and nodeRef
     Given I have an IPI deployment
     Given I store the last provisioned machine in the :machine clipboard
@@ -126,6 +138,7 @@ Feature: Machine features testing
   # @author miyadav@redhat.com
   # @case_id OCP-27627
   @admin
+  @4.9
   Scenario: Verify all machine instance-state should be consistent with their providerStats.instanceState
     Given I have an IPI deployment
     And evaluation of `BushSlicer::Machine.list(user: admin, project: project('openshift-machine-api'))` is stored in the :machines clipboard
@@ -135,6 +148,7 @@ Feature: Machine features testing
   # @case_id OCP-27609
   @admin
   @destructive
+  @4.9
   Scenario: Scaling a machineset with providerSpec.publicIp set to true
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
@@ -151,6 +165,7 @@ Feature: Machine features testing
   # @case_id OCP-24363
   @admin
   @destructive
+  @4.9
   Scenario: [MAO] Reconciling machine taints with nodes
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
@@ -183,6 +198,8 @@ Feature: Machine features testing
   @admin
   @destructive
   @aws-ipi
+  @gcp-ipi
+  @4.9
   Scenario Outline: Required configuration should be added to the ProviderSpec to enable spot instances
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
@@ -272,6 +289,7 @@ Feature: Machine features testing
   # @case_id OCP-32620
   @admin
   @destructive
+  @4.9
   Scenario: Labels specified in a machineset should propagate to nodes
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
@@ -300,6 +318,7 @@ Feature: Machine features testing
   @admin
   @destructive
   @aws-ipi
+  @4.9
   Scenario Outline: Implement defaulting machineset values for AWS
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
@@ -349,6 +368,7 @@ Feature: Machine features testing
   # @case_id OCP-33056
   @admin
   @destructive
+  @4.9
   Scenario: Implement defaulting machineset values for GCP
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
@@ -368,7 +388,7 @@ Feature: Machine features testing
       | ["spec"]["selector"]["matchLabels"]["machine.openshift.io/cluster-api-machineset"]        | default-valued-33056                                 |
       | ["spec"]["template"]["metadata"]["labels"]["machine.openshift.io/cluster-api-cluster"]    | <%= infrastructure("cluster").infra_name %>          |
       | ["spec"]["template"]["spec"]["providerSpec"]["value"]["region"]                           | <%= cb.default_region %>                             |
-      | ["spec"]["template"]["spec"]["providerSpec"]["value"]["serviceAccounts"][0]["email"]      | <%=  cb.default_service_account[0].fetch("email") %> | 
+      | ["spec"]["template"]["spec"]["providerSpec"]["value"]["serviceAccounts"][0]["email"]      | <%=  cb.default_service_account[0].fetch("email") %> |
       | ["spec"]["template"]["spec"]["providerSpec"]["value"]["zone"]                             | <%= cb.default_zone %>                               |
       | ["spec"]["template"]["metadata"]["labels"]["machine.openshift.io/cluster-api-machineset"] | default-valued-33056                                 |
     Then the step should succeed
@@ -383,6 +403,7 @@ Feature: Machine features testing
   # @author miyadav@redhat.com
   @admin
   @destructive
+  @4.9
   Scenario Outline: Implement defaulting machineset values for azure
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
@@ -403,13 +424,13 @@ Feature: Machine features testing
       | ["spec"]["template"]["metadata"]["labels"]["machine.openshift.io/cluster-api-machineset"] | <name>                                      |
       | ["metadata"]["name"]                                                                      | <name>                                      |
     Then the step should succeed
-  
+
     Then I store the last provisioned machine in the :machine_latest clipboard
     And I wait up to 400 seconds for the steps to pass:
     """
     Then the expression should be true> machine(cb.machine_latest).phase(cached: false) == "Running"
     """
-   
+
     When I run the :describe admin command with:
       | resource | machine                  |
       | name     | <%= cb.machine_latest %> |
@@ -425,6 +446,7 @@ Feature: Machine features testing
   # @author miyadav@redhat.com
   # @case_id OCP-33455
   @admin
+  @4.9
   Scenario: Run machine api Controllers using leader election
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
@@ -450,6 +472,7 @@ Feature: Machine features testing
   # @author zhsun@redhat.com
   # @case_id OCP-34718
   @admin
+  @4.9
   Scenario: Node labels and Affinity definition in PV should match
     Given I have a project
 
@@ -479,6 +502,7 @@ Feature: Machine features testing
   # @author miyadav@redhat.com
   @admin
   @destructive
+  @4.9
   Scenario Outline: Implement defaulting machineset values for vsphere
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
@@ -532,6 +556,7 @@ Feature: Machine features testing
   # @case_id OCP-36489
   @admin
   @disconnected
+  @4.9
   Scenario: [Azure] Machineset should not be created when publicIP:true in disconnected Azure enviroment
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user

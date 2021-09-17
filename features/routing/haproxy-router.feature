@@ -3,6 +3,9 @@ Feature: Testing haproxy router
   # @case_id OCP-11903
   @smoke
   @aws-ipi
+  @gcp-upi
+  @gcp-ipi
+  @4.9
   Scenario: haproxy cookies based sticky session for unsecure routes
     #create route and service which has two endpoints
     Given I have a project
@@ -59,6 +62,9 @@ Feature: Testing haproxy router
   # @author bmeng@redhat.com
   # @case_id OCP-11130
   @aws-ipi
+  @gcp-upi
+  @gcp-ipi
+  @4.9
   Scenario: haproxy cookies based sticky session for edge termination routes
     #create route and service which has two endpoints
     Given I have a project
@@ -120,6 +126,9 @@ Feature: Testing haproxy router
   # @author bmeng@redhat.com
   # @case_id OCP-11619
   @aws-ipi
+  @gcp-upi
+  @gcp-ipi
+  @4.9
   Scenario: Limit the number of TCP connection per IP in specified time period
     Given I have a project
     Given I obtain test data file "routing/web-server-1.yaml"
@@ -168,6 +177,9 @@ Feature: Testing haproxy router
   # @case_id OCP-15044
   @admin
   @aws-ipi
+  @gcp-upi
+  @gcp-ipi
+  @4.9
   Scenario: The backend health check interval of unsecure route can be set by annotation
     Given I switch to cluster admin pseudo user
     And I use the router project
@@ -208,6 +220,9 @@ Feature: Testing haproxy router
   # @case_id OCP-15049
   @admin
   @aws-ipi
+  @gcp-upi
+  @gcp-ipi
+  @4.9
   Scenario: The backend health check interval of edge route can be set by annotation
     Given I switch to cluster admin pseudo user
     And I use the router project
@@ -248,6 +263,9 @@ Feature: Testing haproxy router
   # @author bmeng@redhat.com
   # @case_id OCP-10043
   @aws-ipi
+  @gcp-upi
+  @gcp-ipi
+  @4.9
   Scenario: Set balance leastconn for passthrough routes
     Given I have a project
     And I store an available router IP in the :router_ip clipboard
@@ -300,6 +318,9 @@ Feature: Testing haproxy router
   # @author yadu@redhat.com
   # @case_id OCP-11679
   @aws-ipi
+  @gcp-upi
+  @gcp-ipi
+  @4.9
   Scenario: Disable haproxy hash based sticky session for unsecure routes
     Given I have a project
     Given I obtain test data file "routing/web-server-1.yaml"
@@ -342,6 +363,9 @@ Feature: Testing haproxy router
   # @case_id OCP-15872
   @smoke
   @aws-ipi
+  @gcp-upi
+  @gcp-ipi
+  @4.9
   Scenario: can set cookie name for unsecure routes by annotation
     #create route and service which has two endpoints
     Given the master version >= "3.7"
@@ -386,6 +410,9 @@ Feature: Testing haproxy router
   # @author hongli@redhat.com
   # @case_id OCP-15873
   @aws-ipi
+  @gcp-upi
+  @gcp-ipi
+  @4.9
   Scenario: can set cookie name for edge routes by annotation
     #create route and service which has two endpoints
     Given the master version >= "3.7"

@@ -3,6 +3,9 @@ Feature: secrets related scenarios
   # @author yinzhou@redhat.com
   # @case_id OCP-10725
   @aws-ipi
+  @gcp-upi
+  @gcp-ipi
+  @4.9
   Scenario: deployment hook volume inheritance --with secret volume
     Given I have a project
     And I run the :create_secret client command with:
@@ -31,6 +34,9 @@ Feature: secrets related scenarios
   # @case_id OCP-12281
   @smoke
   @aws-ipi
+  @gcp-upi
+  @gcp-ipi
+  @4.9
   Scenario: Pods do not have access to each other's secrets in the same namespace
     Given I have a project
     Given I obtain test data file "secrets/ocp12281/first-secret.json"
@@ -77,6 +83,9 @@ Feature: secrets related scenarios
   # @author qwang@redhat.com
   # @case_id OCP-12310
   @aws-ipi
+  @gcp-upi
+  @gcp-ipi
+  @4.9
   Scenario: Pods do not have access to each other's secrets with the same secret name in different namespaces
     Given I have a project
     Given evaluation of `project.name` is stored in the :project0 clipboard
@@ -117,6 +126,9 @@ Feature: secrets related scenarios
   # @author yantan@redhat.com
   @aws-ipi
   @proxy
+  @gcp-upi
+  @gcp-ipi
+  @4.9
   Scenario Outline: Insert secret to builder container via oc new-build - source/docker build
     Given I have a project
     Given I obtain test data file "secrets/testsecret1.json"
@@ -162,6 +174,9 @@ Feature: secrets related scenarios
   # @case_id OCP-10814
   @smoke
   @aws-ipi
+  @gcp-upi
+  @gcp-ipi
+  @4.9
   Scenario: Consume the same Secrets as environment variables in multiple pods
     Given I have a project
     Given I obtain test data file "secrets/secret.yaml"
@@ -213,6 +228,9 @@ Feature: secrets related scenarios
   # @case_id OCP-11260
   @smoke
   @aws-ipi
+  @gcp-upi
+  @gcp-ipi
+  @4.9
   Scenario: Using Secrets as Environment Variables
     Given I have a project
     Given I obtain test data file "secrets/secret.yaml"
@@ -239,6 +257,8 @@ Feature: secrets related scenarios
   # @author qwang@redhat.com
   # @case_id OCP-11311
   @smoke
+  @gcp-upi
+  @gcp-ipi
   Scenario: Secret volume should update when secret is updated
     Given I have a project
     Given I obtain test data file "secrets/secret1.json"
@@ -275,6 +295,9 @@ Feature: secrets related scenarios
   # @author qwang@redhat.com
   # @case_id OCP-10899
   @aws-ipi
+  @gcp-upi
+  @gcp-ipi
+  @4.9
   Scenario: Mapping specified secret volume should update when secret is updated
     Given I have a project
     Given I obtain test data file "secrets/secret1.json"
@@ -308,6 +331,9 @@ Feature: secrets related scenarios
   # @author qwang@redhat.com
   # @case_id OCP-10569
   @aws-ipi
+  @gcp-upi
+  @gcp-ipi
+  @4.9
   Scenario: Allow specifying secret data using strings and images
     Given I have a project
     Given I obtain test data file "secrets/secret-datastring-image.json"
@@ -355,6 +381,9 @@ Feature: secrets related scenarios
   # @author xiuwang@redhat.com
   # @case_id OCP-10982
   @aws-ipi
+  @gcp-upi
+  @gcp-ipi
+  @4.9
   Scenario: oc new-app to gather git creds
     Given I have a project
     When I have an http-git service in the project

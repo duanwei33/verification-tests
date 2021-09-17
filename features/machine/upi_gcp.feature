@@ -4,6 +4,8 @@ Feature: UPI GCP Tests
   # @case_id OCP-34697
   @admin
   @destructive
+  @gcp-upi
+  @4.9
   Scenario: MachineSets in GCP should create Machines in a Shared (XPN) VPC environment
     Given I have an UPI deployment and machinesets are enabled
 
@@ -11,6 +13,8 @@ Feature: UPI GCP Tests
   # @case_id OCP-25034
   @admin
   @destructive
+  @gcp-upi
+  @4.9
   Scenario: [GCP] Scaling OCP Cluster on UPI
     Given I have an UPI deployment and machinesets are enabled
     And I switch to cluster admin pseudo user

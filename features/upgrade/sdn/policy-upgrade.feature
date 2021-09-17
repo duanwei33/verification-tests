@@ -14,6 +14,9 @@ Feature: SDN compoment upgrade testing
   @admin
   @upgrade-check
   @aws-ipi
+  @gcp-upi
+  @gcp-ipi
+  @4.9
   Scenario: network operator should be available after upgrade
     Given I switch to cluster admin pseudo user
     When I use the "openshift-network-operator" project
@@ -68,6 +71,7 @@ Feature: SDN compoment upgrade testing
   # @case_id OCP-22735
   @admin
   @upgrade-check
+  @4.9
   Scenario: Check the networkpolicy works well after upgrade
     Given I switch to cluster admin pseudo user
     When I use the "policy-upgrade" project
@@ -170,6 +174,9 @@ Feature: SDN compoment upgrade testing
   @admin
   @upgrade-check
   @aws-ipi
+  @gcp-upi
+  @gcp-ipi
+  @4.9
   Scenario: Check the namespace networkpolicy for an application works well after upgrade
     Given I switch to cluster admin pseudo user
     When I use the "policy-upgrade1" project
@@ -324,6 +331,7 @@ Feature: SDN compoment upgrade testing
   # @case_id OCP-40620
   @admin
   @upgrade-check
+  @4.9
   Scenario: Check allow from router and allow from hostnetwork policy are functional post upgrade 
     Given I switch to cluster admin pseudo user
     When I use the "policy-upgrade3" project

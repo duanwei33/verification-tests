@@ -5,6 +5,9 @@ Feature: oc_volume.feature
   # @case_id OCP-12194
   @smoke
   @aws-ipi
+  @gcp-upi
+  @gcp-ipi
+  @4.9
   Scenario: Create a pod that consumes the secret in a volume
     Given I have a project
     Given I obtain test data file "pods/allinone-volume/secret.yaml"
@@ -47,6 +50,9 @@ Feature: oc_volume.feature
   # @case_id OCP-11906
   @smoke
   @aws-ipi
+  @gcp-upi
+  @gcp-ipi
+  @4.9
   Scenario: Add secret volume to dc and rc
     Given I have a project
     When I run the :new_app_as_dc client command with:
