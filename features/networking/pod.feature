@@ -7,6 +7,7 @@ Feature: Pod related networking scenarios
   @gcp-upi
   @gcp-ipi
   @4.9
+  @aws-upi
   Scenario: Pod cannot claim UDP port 4789 on the node as part of a port mapping
     Given I have a project
     And SCC "privileged" is added to the "system:serviceaccounts:<%= project.name %>" group
@@ -30,6 +31,7 @@ Feature: Pod related networking scenarios
   @gcp-upi
   @gcp-ipi
   @4.9
+  @aws-upi
   Scenario: Container could reach the dns server
     Given I have a project
     Given I obtain test data file "pods/ocp10031/pod.json"
@@ -51,6 +53,7 @@ Feature: Pod related networking scenarios
   @gcp-upi
   @gcp-ipi
   @4.9
+  @aws-upi
   Scenario: The openflow list will be cleaned after delete the pods
     Given I have a project
     Given I have a pod-for-ping in the project
@@ -81,6 +84,7 @@ Feature: Pod related networking scenarios
   @gcp-upi
   @gcp-ipi
   @4.9
+  @aws-upi
   Scenario: Check QoS after creating pod
     Given I have a project
     # setup iperf server to receive the traffic
@@ -147,6 +151,7 @@ Feature: Pod related networking scenarios
   @gcp-upi
   @gcp-ipi
   @4.9
+  @aws-upi
   Scenario: A pod with or without hostnetwork cannot access the MCS port 22623 or 22624 on the master
     Given I store the masters in the :masters clipboard
     And the Internal IP of node "<%= cb.masters[0].name %>" is stored in the :master_ip clipboard
@@ -234,6 +239,7 @@ Feature: Pod related networking scenarios
   @gcp-upi
   @gcp-ipi
   @4.9
+  @aws-upi
   Scenario: User cannot access the MCS by creating a service that maps to non-MCS port to port 22623 or 22624 on the IP of a master (via manually-created ep's)
     Given I store the masters in the :masters clipboard
     And the Internal IP of node "<%= cb.masters[0].name %>" is stored in the :master_ip clipboard
@@ -261,6 +267,7 @@ Feature: Pod related networking scenarios
   @admin
   @destructive
   @4.9
+  @network-ovnkubernetes
   Scenario: ovn pod can be scheduled even if the node taint to unschedule
     Given the env is using "OVNKubernetes" networkType
     And I store all worker nodes to the :nodes clipboard
@@ -310,6 +317,7 @@ Feature: Pod related networking scenarios
   @gcp-upi
   @gcp-ipi
   @4.9
+  @aws-upi
   Scenario: [4.x] Conntrack rule for UDP traffic should be removed when the pod for NodePort service deleted
     Given I store the workers in the :nodes clipboard
     And the Internal IP of node "<%= cb.nodes[0].name %>" is stored in the :node_ip clipboard
@@ -396,6 +404,7 @@ Feature: Pod related networking scenarios
   @admin
   @gcp-upi
   @gcp-ipi
+  @aws-upi
   Scenario: Pod should be accesible via node ip and host port
     Given I store the workers in the :workers clipboard
     And the Internal IP of node "<%= cb.workers[0].name %>" is stored in the :worker0_ip clipboard
@@ -426,6 +435,7 @@ Feature: Pod related networking scenarios
   @admin
   @destructive
   @inactive
+  @network-ovnkubernetes
   Scenario: Make sure the route to ovn tunnel for Node's Pod CIDR gets created in both hybrid/non-hybrid mode
   Given the env is using "OVNKubernetes" networkType
   And I select a random node's host
@@ -459,6 +469,7 @@ Feature: Pod related networking scenarios
   @admin
   @destructive
   @4.9
+  @network-ovnkubernetes
   Scenario: Pod readiness check for OVN
     Given the env is using "OVNKubernetes" networkType
     And OVN is functional on the cluster
@@ -555,6 +566,7 @@ Feature: Pod related networking scenarios
   @gcp-upi
   @gcp-ipi
   @4.9
+  @aws-upi
   Scenario: Check the unused ip are released after node reboot
     Given I store the workers in the :workers clipboard
     Given I use the "<%= cb.workers[0].name %>" node
@@ -611,7 +623,7 @@ Feature: Pod related networking scenarios
     When I run oc create over "max-pods-without-consume-memory.yaml" replacing paths:
       | ["items"][0]["spec"]["template"]["spec"]["nodeName"] | <%= cb.nodes[0].name %> |
     Then the step should succeed
-    
+
     ##wait 700 seconds to make sure pods can consume all 509(one subnet eg 10.128.0.1/23 contains 510 ips, there is 10.128.0.1 already be used, so the rest of are 509 ips)
     And I wait up to 700 seconds for the steps to pass:
     """
@@ -628,10 +640,10 @@ Feature: Pod related networking scenarios
     Then the step should succeed
 
     Given the "<%= cb.proj1 %>" project is deleted
-    
+
     ##wait 120 seconds here to make the ip can be released
     Given 120 seconds have passed
-     
+
     ##another project pods will continue consuming the pods ip again
     And I wait up to 700 seconds for the steps to pass:
     """

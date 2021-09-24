@@ -8,6 +8,7 @@ Feature: Kibana related features
   @commonlogging
   @gcp-upi
   @gcp-ipi
+  @aws-upi
   Scenario: Show logs on Kibana web console according to different user role
     Given I switch to the first user
     Given I create a project with non-leading digit name
@@ -64,6 +65,7 @@ Feature: Kibana related features
   @gcp-upi
   @gcp-ipi
   @4.9
+  @aws-upi
   Scenario: Normal User can only view logs out of the projects owned by himself --kibana
     Given I switch to the first user
     And I create a project with non-leading digit name
@@ -81,8 +83,7 @@ Feature: Kibana related features
     Given I switch to the first user
     When I login to kibana logging web console
     Then the step should succeed
-    When I perform the :create_index_pattern_in_kibana web action with:
-      | index_pattern_name | "*app" |
+    Given I have index pattern "*app"
     Then the step should succeed
     Given I wait up to 300 seconds for the steps to pass:
     """
@@ -119,6 +120,7 @@ Feature: Kibana related features
   @gcp-upi
   @gcp-ipi
   @4.9
+  @aws-upi
   Scenario: User with cluster-admin role can show logs out of all projects -- kibana
     Given I switch to the first user
     Given I create a project with non-leading digit name
@@ -137,11 +139,10 @@ Feature: Kibana related features
     And I wait for the project "<%= cb.proj.name %>" logs to appear in the ES pod
     When I login to kibana logging web console
     Then the step should succeed
-    When I perform the :create_index_pattern_in_kibana web action with:
-      | index_pattern_name | "*app" |
+    Given I have index pattern "*app"
     Then the step should succeed
-    When I perform the :create_index_pattern_in_kibana web action with:
-      | index_pattern_name | "*infra" |
+    Given I have index pattern "*infra"
+    Then the step should succeed
     Then the step should succeed
     Given I wait up to 180 seconds for the steps to pass:
     """
@@ -178,6 +179,7 @@ Feature: Kibana related features
   @commonlogging
   @gcp-upi
   @gcp-ipi
+  @aws-upi
   Scenario: Kibana logout function should log off user
     Given the master version < "4.5"
     Given I switch to the first user

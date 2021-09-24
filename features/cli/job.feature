@@ -297,6 +297,7 @@ Feature: job.feature
   @gcp-upi
   @gcp-ipi
   @4.9
+  @aws-upi
   Scenario: Create job with specific deadline
     Given I have a project
     Given I obtain test data file "job/job_with_0_activeDeadlineSeconds.yaml"
@@ -354,6 +355,7 @@ Feature: job.feature
   @gcp-upi
   @gcp-ipi
   @4.9
+  @aws-upi
   Scenario: User can schedule a Cronjob execution with cron format time
     Given I have a project
     When I run the :create_cronjob client command with:
@@ -365,12 +367,7 @@ Feature: job.feature
        | exec_command     | sleep     |
        | exec_command_arg | 300       |
     Then the step should succeed
-    When I run the :get client command with:
-       | resource | cronjob |
-    Then the step should succeed
-    And the output should contain:
-       | NAME     | sj3        |
-       | SCHEDULE | * * * * *  |
+    And the expression should be true> cron_job('sj3').schedule == "* * * * *"
     When I run the :create_cronjob client command with:
        | name             | sj4       |
        | image            | busybox   |
@@ -380,12 +377,7 @@ Feature: job.feature
        | exec_command     | sleep     |
        | exec_command_arg | 300       |
     Then the step should succeed
-    When I run the :get client command with:
-       | resource | cronjob |
-    Then the step should succeed
-    And the output should contain:
-       | NAME     | sj4       |
-       | SCHEDULE | 0 * * * * |
+    And the expression should be true> cron_job('sj4').schedule == "0 * * * *"
     When I run the :create_cronjob client command with:
        | name             | sj5        |
        | image            | busybox    |
@@ -395,12 +387,7 @@ Feature: job.feature
        | exec_command     | sleep      |
        | exec_command_arg | 300        |
     Then the step should succeed
-    When I run the :get client command with:
-       | resource | cronjob |
-    Then the step should succeed
-    And the output should contain:
-       | NAME     | sj5        |
-       | SCHEDULE | * 12 * * * |
+    And the expression should be true> cron_job('sj5').schedule == "* 12 * * *"
     When I run the :create_cronjob client command with:
        | name             | sj6       |
        | image            | busybox   |
@@ -410,12 +397,7 @@ Feature: job.feature
        | exec_command     | sleep     |
        | exec_command_arg | 300       |
     Then the step should succeed
-    When I run the :get client command with:
-       | resource | cronjob |
-    Then the step should succeed
-    And the output should contain:
-       | NAME     | sj6       |
-       | SCHEDULE | * * 1 * * |
+    And the expression should be true> cron_job('sj6').schedule == "* * 1 * *"
     When I run the :create_cronjob client command with:
        | name             | sj7       |
        | image            | busybox   |
@@ -425,12 +407,7 @@ Feature: job.feature
        | exec_command     | sleep     |
        | exec_command_arg | 300       |
     Then the step should succeed
-    When I run the :get client command with:
-       | resource | cronjob |
-    Then the step should succeed
-    And the output should contain:
-       | NAME     | sj7       |
-       | SCHEDULE | * * * 4 * |
+    And the expression should be true> cron_job('sj7').schedule == "* * * 4 *"
     When I run the :create_cronjob client command with:
        | name             | sj8       |
        | image            | busybox   |
@@ -440,12 +417,7 @@ Feature: job.feature
        | exec_command     | sleep     |
        | exec_command_arg | 300       |
     Then the step should succeed
-    When I run the :get client command with:
-       | resource | cronjob |
-    Then the step should succeed
-    And the output should contain:
-       | NAME     | sj8       |
-       | SCHEDULE | * * * * 3 |
+    And the expression should be true> cron_job('sj8').schedule == "* * * * 3"
     When I run the :create_cronjob client command with:
        | name             | sja        |
        | image            | busybox    |
@@ -455,12 +427,7 @@ Feature: job.feature
        | exec_command     | sleep      |
        | exec_command_arg | 300        |
     Then the step should succeed
-    When I run the :get client command with:
-       | resource | cronjob |
-    Then the step should succeed
-    And the output should contain:
-       | NAME     | sja        |
-       | SCHEDULE | 0 12 * * * |
+    And the expression should be true> cron_job('sja').schedule == "0 12 * * *"
     When I run the :create_cronjob client command with:
        | name             | sjb          |
        | image            | busybox      |
@@ -470,12 +437,7 @@ Feature: job.feature
        | exec_command     | sleep        |
        | exec_command_arg | 300          |
     Then the step should succeed
-    When I run the :get client command with:
-       | resource | cronjob |
-    Then the step should succeed
-    And the output should contain:
-       | NAME     | sjb          |
-       | SCHEDULE | 0 12 15 11 3 |
+    And the expression should be true> cron_job('sjb').schedule == "0 12 15 11 3"
     When I run the :create_cronjob client command with:
        | name             | sjc           |
        | image            | busybox       |
@@ -545,12 +507,7 @@ Feature: job.feature
        | exec_command     | sleep     |
        | exec_command_arg | 300       |
     Then the step should succeed
-    When I run the :get client command with:
-       | resource | cronjob |
-    Then the step should succeed
-    And the output should contain:
-       | NAME     | sjd       |
-       | SCHEDULE | @every 5m |
+    And the expression should be true> cron_job('sjd').schedule == "@every 5m"
     When I run the :create_cronjob client command with:
        | name             | sje     |
        | image            | busybox |
@@ -560,10 +517,4 @@ Feature: job.feature
        | exec_command     | sleep   |
        | exec_command_arg | 300     |
     Then the step should succeed
-    When I run the :get client command with:
-       | resource | cronjob |
-    Then the step should succeed
-    And the output should contain:
-       | NAME     | sjd    |
-       | SCHEDULE | @daily |
-
+    And the expression should be true> cron_job('sje').schedule == "@daily"
