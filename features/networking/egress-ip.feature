@@ -4,8 +4,9 @@ Feature: Egress IP related features
   # @case_id OCP-15465
   @admin
   @aws-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
+  @vsphere-ipi
   Scenario: Only cluster admin can add/remove egressIPs on hostsubnet
     Given I select a random node's host
     And evaluation of `node.name` is stored in the :egress_node clipboard
@@ -21,8 +22,9 @@ Feature: Egress IP related features
   # @author bmeng@redhat.com
   # @case_id OCP-15466
   @aws-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
+  @vsphere-ipi
   Scenario: Only cluster admin can add/remove egressIPs on netnamespaces
     # Try to add the egress ip to the netnamespace with normal user
     Given I have a project
@@ -37,7 +39,8 @@ Feature: Egress IP related features
   # @author bmeng@redhat.com
   # @case_id OCP-15471
   @admin
-  @4.9
+  @4.10 @4.9
+  @vsphere-ipi
   Scenario: All the pods egress connection will get out through the egress IP if the egress IP is set to netns and egress node can host the IP
     Given I save ipecho url to the clipboard
     Given I select a random node's host
@@ -93,8 +96,9 @@ Feature: Egress IP related features
   # @case_id OCP-15472
   @admin
   @aws-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
+  @vsphere-ipi
   Scenario: The egressIPs will be added to the node's primary NIC when it gets set on hostsubnet and will be removed after gets unset
     # add the egress ip to the hostsubnet
     Given  the valid egress IP is added to the node
@@ -129,7 +133,8 @@ Feature: Egress IP related features
   # @bug_id  1609112
   @admin
   @destructive
-  @4.9
+  @4.10 @4.9
+  @vsphere-ipi
   Scenario: Should remove the egressIP from the array if it was not being used
     Given I store a random unused IP address from the reserved range to the clipboard
     And evaluation of `IPAddr.new("<%= cb.subnet_range %>").to_s+"/"+IPAddr.new("<%= cb.subnet_range %>").prefix.to_s` is stored in the :valid_subnet clipboard
@@ -176,7 +181,7 @@ Feature: Egress IP related features
   # @case_id OCP-15992
   @admin
   @destructive
-  @4.9
+  @4.10 @4.9
   Scenario: The EgressNetworkPolicy should work well with egressIP
     Given I save ipecho url to the clipboard
     Given the valid egress IP is added to the node
@@ -218,7 +223,7 @@ Feature: Egress IP related features
   # @case_id OCP-15473
   @admin
   @destructive
-  @4.9
+  @4.10 @4.9
   Scenario: The related iptables/openflow rules will be removed once the egressIP gets removed from netnamespace
     Given the valid egress IP is added to the node
     And I have a project
@@ -263,7 +268,8 @@ Feature: Egress IP related features
   # @case_id OCP-19973
   @admin
   @destructive
-  @4.9
+  @4.10 @4.9
+  @vsphere-ipi
   Scenario: The egressIP should still work fine after the node or network service restarted
     Given I save ipecho url to the clipboard
     Given the valid egress IP is added to the node
@@ -299,7 +305,7 @@ Feature: Egress IP related features
   # @author huirwang@redhat.com
   # @case_id OCP-15998
   @admin
-  @4.9
+  @4.10 @4.9
   Scenario: Invalid egressIP should not be acceptable
     Given I select a random node's host
     Given evaluation of `["fe80::5054:ff:fedd:3698", "a.b.c.d", "10.10.10.-1", "10.0.0.1/64", "10.1.1/24", "A008696"]` is stored in the :ips clipboard
@@ -318,7 +324,7 @@ Feature: Egress IP related features
   # @case_id OCP-25694
   @admin
   @destructive
-  @4.9
+  @4.10 @4.9
   Scenario: Random outages with egressIP
     Given I store the schedulable workers in the :nodes clipboard
     And the valid egress IP is added to the "<%= cb.nodes[0].name %>" node
@@ -349,7 +355,8 @@ Feature: Egress IP related features
   # @case_id OCP-25640
   @admin
   @destructive
-  @4.9
+  @4.10 @4.9
+  @vsphere-ipi
   Scenario: Should be able to access to the service's externalIP with egressIP
     Given I have a project
     Given I store the schedulable nodes in the :nodes clipboard
@@ -401,7 +408,7 @@ Feature: Egress IP related features
   # @case_id OCP-18316
   @admin
   @destructive
-  @4.9
+  @4.10 @4.9
   Scenario: The egressIPs should work well when re-using the egressIP which is holding by a deleted project
     Given I save ipecho url to the clipboard
     Given I store the schedulable workers in the :nodes clipboard
@@ -431,7 +438,7 @@ Feature: Egress IP related features
   # @case_id OCP-18315
   @admin
   @destructive
-  @4.9
+  @4.10 @4.9
   Scenario: Add the removed egressIP back to the netnamespace would work well
     Given I save ipecho url to the clipboard
     Given I store the schedulable workers in the :nodes clipboard
@@ -467,7 +474,7 @@ Feature: Egress IP related features
   # @case_id OCP-19785
   @admin
   @destructive
-  @4.9
+  @4.10 @4.9
   Scenario: The pod should be able to access outside with the node source IP after the egressIP removed
     Given I save ipecho url to the clipboard
     Given I store the schedulable workers in the :nodes clipboard
@@ -511,7 +518,7 @@ Feature: Egress IP related features
   # @case_id OCP-15989
   @admin
   @destructive
-  @4.9
+  @4.10 @4.9
   Scenario: Pods will not be affected by the egressIP set on other netnamespace
     Given I save ipecho url to the clipboard
     # create project with pods
@@ -570,7 +577,7 @@ Feature: Egress IP related features
   # @case_id OCP-18586
   @admin
   @destructive
-  @4.9
+  @4.10 @4.9
   Scenario: The same egressIP will not be assigned to different netnamespace
     Given I save ipecho url to the clipboard
     Given I store the schedulable workers in the :nodes clipboard
@@ -609,7 +616,8 @@ Feature: Egress IP related features
   # @case_id OCP-40928
   @admin
   @destructive
-  @4.9
+  @4.10 @4.9
+  @vsphere-ipi
   Scenario: [sdn-1282] Manually EgressIPs assignments:if a pod is on a node that is hosting an egressIP that pod will always use the egressIP of the node it is on
     Given I save ipecho url to the clipboard
     Given I store the schedulable workers in the :nodes clipboard
@@ -653,7 +661,8 @@ Feature: Egress IP related features
   # @case_id OCP-40933
   @admin
   @destructive
-  @4.9
+  @4.10 @4.9
+  @vsphere-ipi
   Scenario: [sdn-1282] Manually EgressIPs assignments: if a pod is not on a node hosting an egressIP it is random which egressIP it will use
     Given I save ipecho url to the clipboard
     Given I store the masters in the :masters clipboard
@@ -698,7 +707,8 @@ Feature: Egress IP related features
   # @case_id OCP-40957
   @admin
   @destructive
-  @4.9
+  @4.10 @4.9
+  @vsphere-ipi
   Scenario: [SDN-1282] Auto EgressIPs assignments: if a pod is not on a node hosting an egressIP it is random which egressIP it will use
     Given I save ipecho url to the clipboard
     Given I store the masters in the :masters clipboard
@@ -744,7 +754,7 @@ Feature: Egress IP related features
   # @case_id OCP-40956
   @admin
   @destructive
-  @4.9
+  @4.10 @4.9
   Scenario: [SDN-1282] Auto EgressIPs assignments:if a pod is on a node that is hosting an egressIP that pod will always use the egressIP of the node
     Given I save ipecho url to the clipboard
     Given I store the schedulable workers in the :workers clipboard

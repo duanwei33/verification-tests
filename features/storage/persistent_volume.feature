@@ -7,8 +7,10 @@ Feature: Persistent Volume Claim binding policies
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
+  @vsphere-ipi
+  @azure-ipi
   Scenario Outline: PVC with one accessMode can bind PV with all accessMode
     Given I have a project
 
@@ -76,8 +78,10 @@ Feature: Persistent Volume Claim binding policies
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
+  @vsphere-ipi
+  @azure-ipi
   Scenario Outline: PV can not bind PVC which request more storage
     Given I have a project
     # PV is 100Mi and PVC is 1Gi
@@ -109,8 +113,10 @@ Feature: Persistent Volume Claim binding policies
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
+  @vsphere-ipi
+  @azure-ipi
   Scenario Outline: PV can not bind PVC with mismatched accessMode
     Given I have a project
     Given I obtain test data file "storage/nfs/auto/pv-template.json"

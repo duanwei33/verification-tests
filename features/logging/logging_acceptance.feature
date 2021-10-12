@@ -8,8 +8,10 @@ Feature: Logging smoke test case
   @console
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
+  @vsphere-ipi
+  @azure-ipi
   Scenario: One logging acceptance case for all cluster
     # Deploy cluster-logging operator via web console
     Given logging service is removed successfully
@@ -92,8 +94,9 @@ Feature: Logging smoke test case
     """
     # Fluentd Metrics
     Given I use the "openshift-logging" project
-    And I wait for the "fluentd" service_monitor to appear
-    And the expression should be true> service_monitor('fluentd').service_monitor_endpoint_spec(port: "metrics").path == "/metrics"
+    Given logging collector name is stored in the :collector_name clipboard
+    And I wait for the "<%= cb.collector_name %>" service_monitor to appear
+    And the expression should be true> service_monitor("<%= cb.collector_name %>").service_monitor_endpoint_spec(port: "metrics").path == "/metrics"
     Given I wait up to 360 seconds for the steps to pass:
     """
     When I perform the GET prometheus rest client with:

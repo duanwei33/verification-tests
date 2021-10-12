@@ -59,8 +59,10 @@ Feature: oc_secrets.feature
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
+  @vsphere-ipi
+  @azure-ipi
   Scenario: [origin_platformexp_391] Project admin can process local directory or files and convert it to kubernetes secret
     Given I have a project
     When the "tmpfoo" file is created with the following lines:

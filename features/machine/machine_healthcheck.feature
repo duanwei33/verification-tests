@@ -6,7 +6,9 @@ Feature: MachineHealthCheck Test Scenarios
   @destructive
   @aws-ipi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
+  @vsphere-ipi
+  @azure-ipi
   Scenario: Remediation should be applied when the unhealthyCondition 'Ready' is met
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
@@ -44,7 +46,9 @@ Feature: MachineHealthCheck Test Scenarios
   @destructive
   @aws-ipi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
+  @vsphere-ipi
+  @azure-ipi
   Scenario: Create a machinehealthcheck when there is already an unhealthy machine
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
@@ -74,7 +78,9 @@ Feature: MachineHealthCheck Test Scenarios
   @destructive
   @aws-ipi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
+  @vsphere-ipi
+  @azure-ipi
   Scenario: Create multiple MHCs to monitor same machineset
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
@@ -106,7 +112,9 @@ Feature: MachineHealthCheck Test Scenarios
   @destructive
   @aws-ipi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
+  @vsphere-ipi
+  @azure-ipi
   Scenario: Use "maxUnhealthy" to prevent automated remediation
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
@@ -156,7 +164,7 @@ Feature: MachineHealthCheck Test Scenarios
   # @case_id OCP-28718
   @admin
   @destructive
-  @4.9
+  @4.10 @4.9
   Scenario: [MHC] - Machine Node startup timeout should be configurable
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
@@ -194,7 +202,7 @@ Feature: MachineHealthCheck Test Scenarios
   # @case_id OCP-25727
   @admin
   @destructive
-  @4.9
+  @4.10 @4.9
   Scenario: Remediation should be applied when machine has nodeRef but node is deleted
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
@@ -246,7 +254,7 @@ Feature: MachineHealthCheck Test Scenarios
   # @case_id OCP-28859
   @admin
   @destructive
-  @4.9
+  @4.10 @4.9
   Scenario: MHC MaxUnhealthy string value should be checked for '%' symbol
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
@@ -283,7 +291,7 @@ Feature: MachineHealthCheck Test Scenarios
   # @author miyadav@redhat.com
   # @case_id OCP-33714
   @admin
-  @4.9
+  @4.10 @4.9
   Scenario: Leverage OpenAPI validation within MHC
     Given I switch to cluster admin pseudo user
     Then I use the "openshift-machine-api" project
@@ -301,7 +309,7 @@ Feature: MachineHealthCheck Test Scenarios
   # @author miyadav@redhat.com
   # @case_id OCP-34095
   @admin
-  @4.9
+  @4.10 @4.9
   Scenario: [mhc] timeout field without units(h,m,s) shoud not be allowed to be stored
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user

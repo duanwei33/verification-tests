@@ -7,8 +7,10 @@ Feature: Egress-ingress related networking scenarios
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
+  @vsphere-ipi
+  @azure-ipi
   Scenario: EgressNetworkPolicy will not take effect after delete it
     Given I have a project
     Given I have a pod-for-ping in the project
@@ -50,8 +52,10 @@ Feature: Egress-ingress related networking scenarios
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
+  @vsphere-ipi
+  @azure-ipi
   Scenario: Apply different egress network policy in different projects
     Given the env is using multitenant or networkpolicy network
     Given I have a project
@@ -118,8 +122,10 @@ Feature: Egress-ingress related networking scenarios
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
+  @vsphere-ipi
+  @azure-ipi
   Scenario: The rules of egress network policy are added in openflow
     Given the env is using multitenant or networkpolicy network
     Given I have a project
@@ -162,8 +168,10 @@ Feature: Egress-ingress related networking scenarios
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
+  @vsphere-ipi
+  @azure-ipi
   Scenario: Egress network policy use dnsname with multiple ipv4 addresses
     Given the env is using multitenant or networkpolicy network
     Given I have a project
@@ -196,19 +204,21 @@ Feature: Egress-ingress related networking scenarios
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
+  @vsphere-ipi
+  @azure-ipi
   Scenario: Service with a DNS name can not by pass Egressnetworkpolicy with that DNS name
     Given the env is using multitenant or networkpolicy network
     Given I have a project
     Given I have a pod-for-ping in the project
     And evaluation of `project.name` is stored in the :proj1 clipboard
 
-    # Create egress policy to deny www.test.com
+    # Create egress policy to deny www.chsi.com.cn
     When I obtain test data file "networking/egress-ingress/dns-egresspolicy2.json"
     And I replace lines in "dns-egresspolicy2.json":
       | 98.138.0.0/16 | 0.0.0.0/0 |
-      | yahoo.com | www.test.com |
+      | yahoo.com | www.chsi.com.cn |
     And I run the :create admin command with:
       | f | dns-egresspolicy2.json |
       | n | <%= cb.proj1 %> |
@@ -223,7 +233,7 @@ Feature: Egress-ingress related networking scenarios
 
     # Check curl from pod
     When I execute on the pod:
-      | curl | --head | www.test.com |
+      | curl | --head | www.chsi.com.cn |
     Then the step should fail
 
     # Delete egress network policy
@@ -236,7 +246,7 @@ Feature: Egress-ingress related networking scenarios
       | egressnetworkpolicy |
       | deleted             |
 
-    # Create egress policy to allow www.test.com
+    # Create egress policy to allow www.chsi.com.cn
     When I obtain test data file "networking/egress-ingress/dns-egresspolicy2.json"
     And I replace lines in "dns-egresspolicy2.json":
       | 98.138.0.0/16 | 0.0.0.0/0 |
@@ -247,7 +257,7 @@ Feature: Egress-ingress related networking scenarios
 
     # Check curl from pod
     When I execute on the pod:
-      | curl | --head | www.test.com |
+      | curl | --head | www.chsi.com.cn |
     Then the step should succeed
 
   # @author weliang@redhat.com
@@ -256,8 +266,10 @@ Feature: Egress-ingress related networking scenarios
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
+  @vsphere-ipi
+  @azure-ipi
   Scenario: Add nodes local IP address to OVS rules for egressnetworkpolicy
     Given the env is using multitenant or networkpolicy network
     Given I have a project
@@ -307,36 +319,36 @@ Feature: Egress-ingress related networking scenarios
   # @author huirwang@redhat.com
   # @case_id OCP-13506
   @admin
-  @4.9
+  @4.10 @4.9
   Scenario: Update different dnsname in same egress network policy
     Given I have a project
     Given I have a pod-for-ping in the project
 
-    # Create egressnetworkpolicy to deny www.test.com
+    # Create egressnetworkpolicy to deny www.chsi.com.cn
     Given I switch to cluster admin pseudo user
     And I use the "<%= project.name %>" project
     Given I obtain test data file "networking/egress-ingress/dns-egresspolicy4.json"
     When I run oc create over "dns-egresspolicy4.json" replacing paths:
-      | ["spec"]["egress"][0]["to"]["dnsName"] | www.test.com |
+      | ["spec"]["egress"][0]["to"]["dnsName"] | www.chsi.com.cn |
     Then the step should succeed
 
-    # Access to www.test.com fail
+    # Access to www.chsi.com.cn fail
     When I execute on the pod:
-      | curl |  -s | --connect-timeout | 5 | www.test.com |
+      | curl |  -I | --connect-timeout | 5 | www.chsi.com.cn |
     Then the step should fail
     And admin ensures "policy-test" egress_network_policy is deleted
 
-    # Create egressnetworkpolicy to deny another domain name www.test1.com
+    # Create egressnetworkpolicy to deny another domain name yahoo.com 
     Given I obtain test data file "networking/egress-ingress/dns-egresspolicy4.json"
     When I run oc create over "dns-egresspolicy4.json" replacing paths:
-      | ["spec"]["egress"][0]["to"]["dnsName"] | www.test1.com |
+      | ["spec"]["egress"][0]["to"]["dnsName"] | yahoo.com | 
     Then the step should succeed
 
     When I execute on the pod:
-      | curl |  -s | --connect-timeout | 5 | www.test1.com |
+      | curl |  -I | --connect-timeout | 5 | yahoo.com | 
     Then the step should fail
     When I execute on the pod:
-      | curl | --head | www.test.com |
+      | curl | --head | www.chsi.com.cn |
     Then the step should succeed
 
   # @author huirwang@redhat.com
@@ -345,8 +357,10 @@ Feature: Egress-ingress related networking scenarios
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
+  @vsphere-ipi
+  @azure-ipi
   Scenario: Iptables should be updated with correct endpoints when egress DNS policy was used
     Given I have a project
     Given I obtain test data file "networking/list_for_pods.json"
@@ -398,8 +412,10 @@ Feature: Egress-ingress related networking scenarios
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
+  @vsphere-ipi
+  @azure-ipi
   Scenario: [SDN-682] EgressFirewall allows traffic to destination ports
     Given I have a project
     Given I have a pod-for-ping in the project
@@ -428,7 +444,7 @@ Feature: Egress-ingress related networking scenarios
       | curl | -k | --connect-timeout | 5 | --head | https://<%= cb.google_ip %>:443 |
     Then the step should fail
     When I execute on the pod:
-      | curl | --connect-timeout | 5 | --head | www.test.com |
+      | curl | --connect-timeout | 5 | --head | www.chsi.com.cn |
     Then the step should fail
 
   # @author huirwang@redhat.com
@@ -437,8 +453,10 @@ Feature: Egress-ingress related networking scenarios
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
+  @vsphere-ipi
+  @azure-ipi
   Scenario:  [SDN-682] EgressFirewall rules take effect in order
     Given I have a project
     Given I have a pod-for-ping in the project
@@ -461,8 +479,10 @@ Feature: Egress-ingress related networking scenarios
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
+  @vsphere-ipi
+  @azure-ipi
   Scenario:  [SDN-682] EgressFirewall policy should not take effect for traffic between pods and pods to service
     Given I have a project
     # Create EgressFirewall policy to deny all outbound traffic
@@ -499,8 +519,10 @@ Feature: Egress-ingress related networking scenarios
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
+  @vsphere-ipi
+  @azure-ipi
   Scenario: [SDN-682] EgressFirewall policy take effect for multiple port
     Given I have a project
     Given I have a pod-for-ping in the project
@@ -520,13 +542,13 @@ Feature: Egress-ingress related networking scenarios
       | curl | -k | --connect-timeout | 5 | --head | https://<%= cb.yahoo_ip %>:443 |
     Then the step should succeed
     When I execute on the pod:
-      | curl | --connect-timeout | 5 | --head | www.test.com |
+      | curl | --connect-timeout | 5 | --head | www.chsi.com.cn |
     Then the step should fail
 
   # @author huirwang@redhat.com
   # @case_id OCP-35341
   @admin
-  @4.9
+  @4.10 @4.9
   Scenario: EgressNetworkPolicy maxItems is 1000
     Given I have a project
     Given I obtain test data file "networking/egressnetworkpolicy/egressnetworkpolicy_1000.yaml"
@@ -551,20 +573,24 @@ Feature: Egress-ingress related networking scenarios
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
+  @vsphere-ipi
+  @azure-ipi
   Scenario: [SDN-1181] EgressFirewall allows traffic to destination dnsName
     Given I have a project
     Given I have a pod-for-ping in the project
 
     When I obtain test data file "networking/ovn-egressfirewall/egressfirewall-policy4.yaml"
-    And I run the :create admin command with:
-      | f | egressfirewall-policy4.yaml  |
-      | n | <%= project.name %>          |
+    When I run oc create as admin over "egressfirewall-policy4.yaml" replacing paths:
+      | ["spec"]["egress"][0]["to"]["dnsName"] | www.chsi.com.cn       |
+      | ["metadata"]["namespace"]              | <%= project.name %>   |
 
     # Check curl from pod
+    Given I wait up to 60 seconds for the steps to pass:
+    """
     When I execute on the pod:
-      | curl | --connect-timeout | 5 | --head | www.test.com |
+      | curl | --connect-timeout | 5 | --head | www.chsi.com.cn |
     Then the step should succeed
     When I execute on the pod:
       | curl | -k | --connect-timeout | 5 | --head | https://yahoo.com:443 |
@@ -575,6 +601,7 @@ Feature: Egress-ingress related networking scenarios
     When I execute on the pod:
       | curl | --connect-timeout | 5 | --head | google.com |
     Then the step should fail
+    """
 
   # @author huirwang@redhat.com
   # @case_id OCP-37495
@@ -582,23 +609,26 @@ Feature: Egress-ingress related networking scenarios
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
+  @vsphere-ipi
+  @azure-ipi
   Scenario: [SDN-1181] EgressFirewall denys traffic to destination dnsName
     Given I have a project
 
     When I obtain test data file "networking/ovn-egressfirewall/egressfirewall-policy4.yaml"
     And I run oc create as admin over "egressfirewall-policy4.yaml" replacing paths:
-      | ["spec"]["egress"][0]["type"]| Deny                 |
-      | ["spec"]["egress"][1]["type"]| Deny                 |
-      | ["spec"]["egress"][2]["type"]| Allow                |
-      | ["metadata"]["namespace"]    | <%= project.name %>  |
+      | ["spec"]["egress"][0]["type"]          | Deny                 |
+      | ["spec"]["egress"][0]["to"]["dnsName"] | www.chsi.com.cn      | 
+      | ["spec"]["egress"][1]["type"]          | Deny                 |
+      | ["spec"]["egress"][2]["type"]          | Allow                |
+      | ["metadata"]["namespace"]              | <%= project.name %>  |
     Then the step should succeed
 
     Given I have a pod-for-ping in the project
     # Check curl from pod
     When I execute on the pod:
-      | curl | --connect-timeout | 5 | --head | www.test.com |
+      | curl | --connect-timeout | 5 | --head | www.chsi.com.cn |
     Then the step should fail
     When I execute on the pod:
       | curl | -k | --connect-timeout | 5 | --head | https://yahoo.com:443 |
@@ -613,30 +643,34 @@ Feature: Egress-ingress related networking scenarios
   # @author huirwang@redhat.com
   # @case_id OCP-37496
   @admin
-  @4.9
+  @4.10 @4.9
   Scenario: [SDN-1181] Edit EgressFirewall should take effect
     Given I have a project
     Given I have a pod-for-ping in the project
 
     When I obtain test data file "networking/ovn-egressfirewall/egressfirewall-policy4.yaml"
     And I run oc create as admin over "egressfirewall-policy4.yaml" replacing paths:
-      | ["spec"]["egress"][0]["type"]| Deny                |
-      | ["metadata"]["namespace"]    | <%= project.name %> |
+      | ["spec"]["egress"][0]["type"]          | Deny                |
+      | ["spec"]["egress"][0]["to"]["dnsName"] | www.chsi.com.cn     |
+      | ["metadata"]["namespace"]              | <%= project.name %> |
     Then the step should succeed
 
     When I execute on the pod:
-      | curl | --connect-timeout | 5 | --head | www.test.com |
+      | curl | --connect-timeout | 5 | --head | www.chsi.com.cn |
     Then the step should fail
 
     #Edit the egressfirewall rule
     Given I switch to cluster admin pseudo user
     And I use the "<%= project.name %>" project
     And as admin I successfully merge patch resource "egressfirewall.k8s.ovn.org/default" with:
-      |{"spec":{"egress":[{"type":"Allow","to":{"dnsName":"www.test.com"}}]}}|
+      |{"spec":{"egress":[{"type":"Allow","to":{"dnsName":"www.chsi.com.cn"}}]}}|
 
+    Given I wait up to 30 seconds for the steps to pass:
+    """
     When I execute on the pod:
-      | curl | --connect-timeout | 5 | --head | www.test.com |
+      | curl | --connect-timeout | 10 | --head | www.chsi.com.cn |
     Then the step should succeed
+    """
 
   # @author huirwang@redhat.com
   # @case_id OCP-41179
@@ -644,8 +678,10 @@ Feature: Egress-ingress related networking scenarios
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
+  @vsphere-ipi
+  @azure-ipi
   Scenario: [bug1947917] Egress Firewall should reliably apply firewall rules
     Given I have a project
     Given I have a pod-for-ping in the project
@@ -674,5 +710,5 @@ Feature: Egress-ingress related networking scenarios
 
     # Check another dnsname not in the yaml file should be blocked.
     When I execute on the pod:
-      | curl | --connect-timeout | 5 | --head | www.test.com |
+      | curl | --connect-timeout | 5 | --head | www.chsi.com.cn |
     Then the step should fail

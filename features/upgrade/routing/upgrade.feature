@@ -19,8 +19,10 @@ Feature: Routing and DNS related scenarios
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
+  @vsphere-ipi
+  @azure-ipi
   Scenario: ensure ingress works well before and after upgrade
     # Check console route after upgraded
     Given I switch to cluster admin pseudo user
@@ -53,8 +55,10 @@ Feature: Routing and DNS related scenarios
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
+  @vsphere-ipi
+  @azure-ipi
   Scenario: ensure DNS works well before and after upgrade
     # Check service name can be resolvede
     Given I switch to cluster admin pseudo user
@@ -92,7 +96,7 @@ Feature: Routing and DNS related scenarios
   # @case_id OCP-30501
   @upgrade-check
   @admin
-  @4.9
+  @4.10 @4.9
   Scenario: upgrade with running router pods on all worker nodes
     Given I switch to cluster admin pseudo user
     And I store the number of worker nodes to the :num_workers clipboard
@@ -174,7 +178,8 @@ Feature: Routing and DNS related scenarios
   @admin
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
+  @azure-ipi
   Scenario: upgrade with route shards
     # Ensure cluster operator ingress is in normal status after upgrade
     Given I switch to cluster admin pseudo user

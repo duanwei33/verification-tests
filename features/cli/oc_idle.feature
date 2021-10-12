@@ -5,8 +5,10 @@ Feature: oc idle
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
+  @vsphere-ipi
+  @azure-ipi
   Scenario: CLI - Idle all the service in the same project
     Given I have a project
     Given I obtain test data file "rc/idle-rc-1.yaml"
@@ -53,8 +55,10 @@ Feature: oc idle
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
+  @vsphere-ipi
+  @azure-ipi
   Scenario: CLI - Idle service by label
     Given I have a project
     Given I obtain test data file "rc/idle-rc-2.yaml"
@@ -94,8 +98,10 @@ Feature: oc idle
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
+  @vsphere-ipi
+  @azure-ipi
   Scenario: CLI - Idle service from file
     Given I have a project
     Given I obtain test data file "rc/idle-rc-2.yaml"
@@ -140,8 +146,10 @@ Feature: oc idle
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
+  @vsphere-ipi
+  @azure-ipi
   Scenario: CLI - Idle service with dry-run
     Given I have a project
     Given I obtain test data file "rc/idle-rc-2.yaml"

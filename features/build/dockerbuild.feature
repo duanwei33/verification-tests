@@ -5,8 +5,10 @@ Feature: dockerbuild.feature
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
+  @vsphere-ipi
+  @azure-ipi
   Scenario: Docker build with both SourceURI and context dir
     Given I have a project
     Given I obtain test data file "build/ruby20rhel7-context-docker.json"
@@ -28,7 +30,7 @@ Feature: dockerbuild.feature
   # @case_id OCP-30854
   @flaky
   @proxy
-  @4.9
+  @4.10 @4.9
   Scenario: Docker build with dockerImage with specified tag
     Given I have a project
     When I run the :new_app client command with:
@@ -89,8 +91,10 @@ Feature: dockerbuild.feature
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
+  @vsphere-ipi
+  @azure-ipi
   Scenario: Add ARGs in docker build
     Given I have a project
     When I run the :new_build client command with:
@@ -150,8 +154,10 @@ Feature: dockerbuild.feature
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
+  @vsphere-ipi
+  @azure-ipi
   Scenario: Mount source secret to builder container- dockerstrategy
     Given I have a project
     When I run the :create_secret client command with:
@@ -189,8 +195,10 @@ Feature: dockerbuild.feature
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
+  @vsphere-ipi
+  @azure-ipi
   Scenario: Mount source configmap to builder container- dockerstrategy 
     Given I have a project
     When I run the :create_configmap client command with:
@@ -227,8 +235,10 @@ Feature: dockerbuild.feature
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
+  @vsphere-ipi
+  @azure-ipi
   Scenario: Mount multi paths to builder container 
     Given I have a project
     When I run the :create_secret client command with:
@@ -267,8 +277,10 @@ Feature: dockerbuild.feature
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
+  @vsphere-ipi
+  @azure-ipi
   Scenario: Can't add relative path for mount path 
     Given I have a project
     When I run the :create_secret client command with:

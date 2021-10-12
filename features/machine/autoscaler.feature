@@ -6,7 +6,9 @@ Feature: Cluster Autoscaler Tests
   @destructive
   @aws-ipi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
+  @vsphere-ipi
+  @azure-ipi
   Scenario: Cluster should automatically scale up and scale down with clusterautoscaler deployed
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
@@ -125,7 +127,7 @@ Feature: Cluster Autoscaler Tests
   # @case_id OCP-22102
   @admin
   @destructive
-  @4.9
+  @4.10 @4.9
   Scenario: Update machineAutoscaler to reference a different MachineSet
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
@@ -197,7 +199,7 @@ Feature: Cluster Autoscaler Tests
   # @case_id OCP-23745
   @admin
   @destructive
-  @4.9
+  @4.10 @4.9
   Scenario: Machineautoscaler can be deleted when its referenced machineset does not exist
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user

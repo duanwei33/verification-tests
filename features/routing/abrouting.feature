@@ -271,8 +271,10 @@ Feature: Testing abrouting
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
+  @vsphere-ipi
+  @azure-ipi
   Scenario: Each endpoint gets weight/numberOfEndpoints portion of the requests - unsecure route
     Given I switch to cluster admin pseudo user
     And I use the router project
@@ -356,8 +358,10 @@ Feature: Testing abrouting
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
+  @vsphere-ipi
+  @azure-ipi
   Scenario: Each endpoint gets weight/numberOfEndpoints portion of the requests - passthrough route
     Given I switch to cluster admin pseudo user
     And I use the router project

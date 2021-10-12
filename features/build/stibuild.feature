@@ -3,8 +3,10 @@ Feature: stibuild.feature
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
+  @vsphere-ipi
+  @azure-ipi
   Scenario Outline: Trigger s2i/docker/custom build using additional imagestream
     Given I have a project
     Given I obtain test data file "templates/<template>"
@@ -47,13 +49,15 @@ Feature: stibuild.feature
   @proxy
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
+  @vsphere-ipi
+  @azure-ipi
   Scenario: STI build with dockerImage with specified tag
     Given I have a project
     When I run the :new_app client command with:
-      | docker_image | centos/ruby-25-centos7                  |
-      | app_repo     | https://github.com/openshift-qe/ruby-ex |
+      | docker_image | quay.io/openshifttest/ruby-22-centos7:2.2 |
+      | app_repo     | https://github.com/openshift-qe/ruby-ex   |
     Then the step should succeed
     And the "ruby-ex-1" build completes
     When I run the :patch client command with:
@@ -84,7 +88,7 @@ Feature: stibuild.feature
   # @author wzheng@redhat.com
   # @case_id OCP-22596
   @proxy
-  @4.9
+  @4.10 @4.9
   Scenario: Create app with template eap73-basic-s2i with jbosseap rhel7 image
     Given I have a project
     When I run the :new_app client command with:
@@ -105,8 +109,10 @@ Feature: stibuild.feature
   @disconnected
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
+  @vsphere-ipi
+  @azure-ipi
   Scenario: Test s2i build in disconnect cluster
     Given I have a project
     When I have an http-git service in the project
@@ -134,8 +140,10 @@ Feature: stibuild.feature
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
+  @vsphere-ipi
+  @azure-ipi
   Scenario: Mount source secret and configmap to builder container- sourcestrategy 
     Given I have a project
     When I run the :create_secret client command with:

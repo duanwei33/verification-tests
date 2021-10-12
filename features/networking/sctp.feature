@@ -4,13 +4,17 @@ Feature: SCTP related scenarios
   # @case_id OCP-28757
   @admin
   @destructive
-  @4.9
+  @4.10 @4.9
   Scenario: Establish pod to pod SCTP connections
     Given I store the ready and schedulable workers in the :workers clipboard
     And I install machineconfigs load-sctp-module
     And I have a project
     And I wait up to 800 seconds for the steps to pass:
     """
+    When I run the :get admin command with:
+      |resource|nodes|
+    Then the step should succeed
+    Then the outputs should contain "Ready"
     Given I check load-sctp-module in all workers
     """
 
@@ -53,13 +57,17 @@ Feature: SCTP related scenarios
   # @case_id OCP-28758
   @admin
   @destructive
-  @4.9
+  @4.10 @4.9
   Scenario: Expose SCTP ClusterIP Services
     Given I store the ready and schedulable workers in the :workers clipboard
     And I install machineconfigs load-sctp-module
     And I have a project
     And I wait up to 800 seconds for the steps to pass:
     """
+    When I run the :get admin command with:
+      |resource|nodes|
+    Then the step should succeed
+    Then the outputs should contain "Ready"
     Given I check load-sctp-module in all workers
     """
  
@@ -108,7 +116,7 @@ Feature: SCTP related scenarios
   # @case_id OCP-28759
   @admin
   @destructive
-  @4.9
+  @4.10 @4.9
   Scenario: Expose SCTP NodePort Services
     Given I store the ready and schedulable workers in the :workers clipboard
     And the Internal IP of node "<%= cb.workers[1].name %>" is stored in the :worker1_ip clipboard
@@ -116,6 +124,10 @@ Feature: SCTP related scenarios
     Given I have a project
     And I wait up to 800 seconds for the steps to pass:
     """
+    When I run the :get admin command with:
+      |resource|nodes|
+    Then the step should succeed
+    Then the outputs should contain "Ready"
     Given I check load-sctp-module in all workers
     """
 
@@ -165,13 +177,17 @@ Feature: SCTP related scenarios
   # @case_id OCP-29645
   @admin
   @destructive
-  @4.9
+  @4.10 @4.9
   Scenario: Networkpolicy allow SCTP Client
     Given I store the ready and schedulable workers in the :workers clipboard
     And I install machineconfigs load-sctp-module
     And I have a project
     And I wait up to 800 seconds for the steps to pass:
     """
+    When I run the :get admin command with:
+      |resource|nodes|
+    Then the step should succeed
+    Then the outputs should contain "Ready"
     Given I check load-sctp-module in all workers
     """
 
@@ -260,3 +276,4 @@ Feature: SCTP related scenarios
       | Connected to <%= cb.serverpod_ip %> |
       | 15 bytes sent                       |
     """
+

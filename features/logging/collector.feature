@@ -201,13 +201,15 @@ Feature: collector related tests
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
+  @vsphere-ipi
+  @azure-ipi
   Scenario: All nodes logs are collected
     Given the master version >= "4.5"
-    Given evaluation of `cluster_logging('instance').collection_type` is stored in the :collection_type clipboard
-    Given <%= daemon_set(cb.collection_type).replica_counters[:desired] %> pods become ready with labels:
-      | component=<%= cb.collection_type %> |
+    Given logging collector name is stored in the :collector_name clipboard
+    Given <%= daemon_set(cb.collector_name).replica_counters[:desired] %> pods become ready with labels:
+      | component=<%= cb.collector_name %> |
     And evaluation of `@pods.map {|n| n.node_ip}.uniq` is stored in the :node_ips clipboard
     Given I wait for the "infra" index to appear in the ES pod with labels "es-node-master=true"
     Then I get the "infra" logging index information from a pod with labels "es-node-master=true"
@@ -230,11 +232,12 @@ Feature: collector related tests
     And the expression should be true> Set.new(cb.node_ips) == Set.new(cb.journal_ips)
     """
 
+    Given evaluation of `cluster_logging('instance').collection_type` is stored in the :collection_type clipboard
     When I perform the HTTP request on the ES pod with labels "es-node-master=true":
       | relative_url | infra*/_search?pretty'  -d '{"query": {"exists": {"field": "systemd"}}} |
       | op           | GET                                                                     |
     Then the step should succeed
-    And the expression should be true> @result[:parsed]['hits']['hits'][0]['_source']['pipeline_metadata']['collector']['name'] == "fluentd"
+    And the expression should be true> @result[:parsed]['hits']['hits'][0]['_source']['pipeline_metadata']['collector']['name'] == "<%= cb.collection_type %>"
     And the expression should be true> @result[:parsed]['hits']['hits'][0]['_source']['pipeline_metadata']['collector']['inputname'] == "fluent-plugin-systemd"
 
   # @author qitang@redhat.com
@@ -253,24 +256,32 @@ Feature: collector related tests
       | l           | es-node-master=true |
     Then the step should succeed
     And I wait until ES cluster is ready
-    And I wait for the project "openshift-logging" logs to appear in the ES pod
+    Given I switch to the first user
+    And I have a project
+    And evaluation of `project` is stored in the :loggen_proj clipboard
+    And I have "json" log pod in project "<%= cb. loggen_proj.name%>"
+    Given I switch to cluster admin pseudo user
+    And I use the "openshift-logging" project
+    And I wait for the project "<%= cb. loggen_proj.name%>" logs to appear in the ES pod
+    Given logging collector name is stored in the :collector_name clipboard
     Given a pod becomes ready with labels:
-      | logging-infra=fluentd |
+      | logging-infra=<%= cb.collector_name %> |
     And evaluation of `pod.name` is stored in the :fluentd_pod clipboard
     When I run the :logs client command with:
-      | resource_name | <%= cb.fluentd_pod %> |
+      | resource_name  | <%= cb.fluentd_pod %>    |
+      | c              | <%= cb.collector_name %> |
     Then the step should succeed
     And the output should not contain:
       | Fluentd logs have been redirected to: /var/log/fluentd/fluentd.log |
       | If you want to print out the logs, use command:                    |
       | oc exec <pod_name> /usr/local/logs                                 |
-    When I execute on the "<%= cb.fluentd_pod %>" pod:
+    When I execute on the "<%= cb.fluentd_pod %>" pod "<%= cb.collector_name %>" container:
       | ls | /var/log/ |
     Then the step should succeed
     And the output should not contain:
       | fluentd |
     When I perform the HTTP request on the ES pod with labels "es-node-master=true":
-      | relative_url | _count?pretty' -d '{"query": {"match": {"kubernetes.container_name": "fluentd"}}} |
+      | relative_url | _count?pretty' -d '{"query": {"match": {"kubernetes.container_name": "<%= cb.collector_name %>"}}} |
       | op           | GET |
     Then the step should succeed
-    And the expression should be true> JSON.parse(@result[:response])['count'] == 0
+    And the expression should be true> JSON.parse(@result[:stdout])['count'] == 0

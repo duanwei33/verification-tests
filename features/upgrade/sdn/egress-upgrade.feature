@@ -18,9 +18,9 @@ Feature: Egress compoment upgrade testing
     And evaluation of `pod(0).name` is stored in the :pod1 clipboard
 
     When I execute on the "<%= cb.pod1 %>" pod:
-      | curl | -I | --connect-timeout | 5 | www.test.com | 
+      | curl | -I | --connect-timeout | 5 | redhat.com |
     Then the step should succeed
-    And the output should contain "HTTP/1.1"
+    And the output should contain "HTTP/1.0"
 
     Given I save egress data file directory to the clipboard
     Given I obtain test data file "networking/<%= cb.cb_egress_directory %>/limit_policy.json"
@@ -32,27 +32,37 @@ Feature: Egress compoment upgrade testing
     And I wait up to 10 seconds for the steps to pass:
     """
     When I execute on the "<%= cb.pod1 %>" pod:
-      | curl | -I | --connect-timeout | 5 | www.test.com |
+      | curl | -I | --connect-timeout | 5 | redhat.com |
     Then the step should fail 
-    And the output should not contain "HTTP/1.1"
+    And the output should not contain "HTTP/1.0"
     """
 
   # @author huirwang@redhat.com
   # @case_id OCP-44315
   @admin
   @upgrade-check
-  @4.9
+  @4.10 @4.9
   @aws-upi
+  @vsphere-ipi
+  @azure-ipi
   Scenario: Check egressfirewall is functional post upgrade
     Given I switch to cluster admin pseudo user
-    And I use the "egressfw-upgrade1" project
+    And I save egress type to the clipboard
+    When I run the :get admin command with:
+      | resource | <%= cb.cb_egress_type %>  |
+      | n        | egressfw-upgrade1         |
+      | o        | jsonpath={.items[*].spec} |
+    Then the step should succeed
+    And the output should contain:
+      | 0.0.0.0/0 |
+    Given I use the "egressfw-upgrade1" project
     Given status becomes :running of 1 pod labeled:
       | name=test-pods |
     And evaluation of `pod(0).name` is stored in the :pod1 clipboard
     When I execute on the "<%= cb.pod1 %>" pod:
-      | curl | -I | --connect-timeout | 5 | www.test.com |
+      | curl | -I | --connect-timeout | 5 | redhat.com |
     Then the step should fail 
-    And the output should not contain "HTTP/1.1"
+    And the output should not contain "HTTP/1.0"
 
   # @author huirwang@redhat.com
   @admin
@@ -108,7 +118,7 @@ Feature: Egress compoment upgrade testing
   # @case_id OCP-44316
   @admin
   @upgrade-check
-  @4.9
+  @4.10 @4.9
   Scenario: Check ovn egressip is functional post upgrade
     Given I save ipecho url to the clipboard
     Given I switch to cluster admin pseudo user
