@@ -2,13 +2,10 @@ Feature: oc idle
 
   # @author chezhang@redhat.com
   # @case_id OCP-11633
-  @aws-ipi
-  @gcp-upi
-  @gcp-ipi
-  @4.10 @4.9
-  @aws-upi
-  @vsphere-ipi
-  @azure-ipi
+  @4.8 @4.7 @4.10 @4.9
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @upgrade-sanity
   Scenario: CLI - Idle all the service in the same project
     Given I have a project
     Given I obtain test data file "rc/idle-rc-1.yaml"
@@ -52,13 +49,10 @@ Feature: oc idle
 
   # @author chezhang@redhat.com
   # @case_id OCP-11980
-  @aws-ipi
-  @gcp-upi
-  @gcp-ipi
-  @4.10 @4.9
-  @aws-upi
-  @vsphere-ipi
-  @azure-ipi
+  @4.8 @4.7 @4.10 @4.9
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @upgrade-sanity
   Scenario: CLI - Idle service by label
     Given I have a project
     Given I obtain test data file "rc/idle-rc-2.yaml"
@@ -95,13 +89,10 @@ Feature: oc idle
 
   # @author chezhang@redhat.com
   # @case_id OCP-12085
-  @aws-ipi
-  @gcp-upi
-  @gcp-ipi
-  @4.10 @4.9
-  @aws-upi
-  @vsphere-ipi
-  @azure-ipi
+  @4.8 @4.7 @4.10 @4.9
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @upgrade-sanity
   Scenario: CLI - Idle service from file
     Given I have a project
     Given I obtain test data file "rc/idle-rc-2.yaml"
@@ -143,13 +134,10 @@ Feature: oc idle
 
   # @author chezhang@redhat.com
   # @case_id OCP-12169
-  @aws-ipi
-  @gcp-upi
-  @gcp-ipi
-  @4.10 @4.9
-  @aws-upi
-  @vsphere-ipi
-  @azure-ipi
+  @4.8 @4.7 @4.10 @4.9
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @upgrade-sanity
   Scenario: CLI - Idle service with dry-run
     Given I have a project
     Given I obtain test data file "rc/idle-rc-2.yaml"
@@ -182,9 +170,6 @@ Feature: oc idle
   # @author chezhang@redhat.com
   # @author minmli@redhat.com
   # @case_id OCP-10941
-  @gcp-upi
-  @gcp-ipi
-  @aws-upi
   Scenario: Idling service with dc
     Given I have a project
     Given I obtain test data file "rc/idling-echo-server.yaml"
@@ -251,9 +236,6 @@ Feature: oc idle
 
   # @author chezhang@redhat.com
   # @case_id OCP-11345
-  @gcp-upi
-  @gcp-ipi
-  @aws-upi
   Scenario: Idling service with rc
     Given I have a project
     Given I obtain test data file "rc/idle-rc-2.yaml"

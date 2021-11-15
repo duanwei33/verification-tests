@@ -3,13 +3,10 @@ Feature: Testing route
   # @author hongli@redhat.com
   # @case_id OCP-12122
   @smoke
-  @aws-ipi
-  @gcp-upi
-  @gcp-ipi
-  @4.10 @4.9
-  @aws-upi
-  @vsphere-ipi
-  @azure-ipi
+  @4.8 @4.7 @4.10 @4.9
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @upgrade-sanity
   Scenario: Alias will be invalid after removing it
     Given I have a project
     Given I obtain test data file "routing/header-test/dc.json"
@@ -36,13 +33,10 @@ Feature: Testing route
   # @author hongli@redhat.com
   # @case_id OCP-10660
   @smoke
-  @aws-ipi
-  @gcp-upi
-  @gcp-ipi
-  @4.10 @4.9
-  @aws-upi
-  @vsphere-ipi
-  @azure-ipi
+  @4.8 @4.7 @4.10 @4.9
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @upgrade-sanity
   Scenario: Service endpoint can be work well if the mapping pod ip is updated
     Given I have a project
     Given I obtain test data file "networking/list_for_pods.json"
@@ -88,13 +82,10 @@ Feature: Testing route
   # @author hongli@redhat.com
   # @case_id OCP-12652
   @smoke
-  @aws-ipi
-  @gcp-upi
-  @gcp-ipi
-  @4.10 @4.9
-  @aws-upi
-  @vsphere-ipi
-  @azure-ipi
+  @4.8 @4.7 @4.10 @4.9
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @upgrade-sanity
   Scenario: The later route should be HostAlreadyClaimed when there is a same host exist
     Given I have a project
     Given I obtain test data file "routing/unsecure/route_unsecure.json"
@@ -117,13 +108,10 @@ Feature: Testing route
   # @author hongli@redhat.com
   # @case_id OCP-12562
   @smoke
-  @aws-ipi
-  @gcp-upi
-  @gcp-ipi
-  @4.10 @4.9
-  @aws-upi
-  @vsphere-ipi
-  @azure-ipi
+  @4.8 @4.7 @4.10 @4.9
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @upgrade-sanity
   Scenario: The path specified in route can work well for edge terminated
     Given I have a project
     Given I obtain test data file "routing/web-server-1.yaml"
@@ -197,18 +185,14 @@ Feature: Testing route
     Then the output should contain "Hello-OpenShift-Path-Test"
     """
 
-  # @author zzhao@redhat.com
+  # @author shudili@redhat.com
   # @case_id OCP-12564
-  @aws-ipi
-  @gcp-upi
-  @gcp-ipi
-  @4.10 @4.9
-  @aws-upi
-  @vsphere-ipi
-  @azure-ipi
+  @4.8 @4.7 @4.10 @4.9
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @upgrade-sanity
   Scenario: The path specified in route can work well for reencrypt terminated
     Given I have a project
-    And I store an available router IP in the :router_ip clipboard
     Given I obtain test data file "routing/web-server-1.yaml"
     When I run the :create client command with:
       | f | web-server-1.yaml |
@@ -219,52 +203,39 @@ Feature: Testing route
     When I run the :create client command with:
       | f | service_secure.yaml |
     Then the step should succeed
-
     Given I have a pod-for-ping in the project
-    And CA trust is added to the pod-for-ping
-    Given I obtain test data file "routing/reencrypt/route_reencrypt-reen.example.com.crt"
-    Given I obtain test data file "routing/reencrypt/route_reencrypt-reen.example.com.key"
-    Given I obtain test data file "routing/reencrypt/route_reencrypt.ca"
+    #And CA trust is added to the pod-for-ping
+    # check reencrypt route
     Given I obtain test data file "routing/reencrypt/route_reencrypt_dest.ca"
     When I run the :create_route_reencrypt client command with:
-      | name       | route-recrypt                                                                                 |
-      | hostname   | <%= rand_str(5, :dns) %>-reen.example.com                                                     |
-      | service    | service-secure                                                                                |
-      | cert       | route_reencrypt-reen.example.com.crt |
-      | key        | route_reencrypt-reen.example.com.key |
-      | cacert     | route_reencrypt.ca                   |
-      | destcacert | route_reencrypt_dest.ca              |
-      | path       | /test                                                                                         |
+      | name       | route-recrypt           |
+      | service    | service-secure          |
+      | destcacert | route_reencrypt_dest.ca |
+      | path       | /test                   |
     Then the step should succeed
-    And I wait up to 20 seconds for the steps to pass:
+    Then I wait up to 60 seconds for the steps to pass:
     """
     When I execute on the pod:
       | curl |
-      | --resolve |
-      | <%= route("route-recrypt", service("route-recrypt")).dns(by: user) %>:443:<%= cb.router_ip[0] %> |
       | https://<%= route("route-recrypt", service("route-recrypt")).dns(by: user) %>/test/ |
-      | --cacert |
-      | /tmp/ca-test.pem |
+      | -k |
     Then the output should contain "Hello-OpenShift-Path-Test"
     """
+    Then I wait up to 20 seconds for the steps to pass:
+    """
     When I execute on the pod:
       | curl |
-      | --resolve |
-      | <%= route("route-recrypt", service("route-recrypt")).dns(by: user) %>:443:<%= cb.router_ip[0] %> |
       | https://<%= route("route-recrypt", service("route-recrypt")).dns(by: user) %>/ |
-      | --cacert |
-      | /tmp/ca-test.pem |
+      | -k |
     Then the output should contain "Application is not available"
+    """
 
   # @author yadu@redhat.com
   # @case_id OCP-9651
-  @aws-ipi
-  @gcp-upi
-  @gcp-ipi
-  @4.10 @4.9
-  @aws-upi
-  @vsphere-ipi
-  @azure-ipi
+  @4.8 @4.7 @4.10 @4.9
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @upgrade-sanity
   Scenario: Config insecureEdgeTerminationPolicy to Redirect for route
     Given I have a project
     And I store an available router IP in the :router_ip clipboard
@@ -310,13 +281,10 @@ Feature: Testing route
 
   # @author yadu@redhat.com
   # @case_id OCP-9650
-  @aws-ipi
-  @gcp-upi
-  @gcp-ipi
-  @4.10 @4.9
-  @aws-upi
-  @vsphere-ipi
-  @azure-ipi
+  @4.8 @4.7 @4.10 @4.9
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @upgrade-sanity
   Scenario: Config insecureEdgeTerminationPolicy to Allow for route
     Given I have a project
     And I store an available router IP in the :router_ip clipboard
@@ -379,13 +347,10 @@ Feature: Testing route
   # @author hongli@redhat.com
   # @case_id OCP-10024
   @smoke
-  @aws-ipi
-  @gcp-upi
-  @gcp-ipi
-  @4.10 @4.9
-  @aws-upi
-  @vsphere-ipi
-  @azure-ipi
+  @4.8 @4.7 @4.10 @4.9
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @upgrade-sanity
   Scenario: Route could NOT be updated after created
     Given I have a project
     Given I obtain test data file "routing/route_withouthost1.json"
@@ -401,13 +366,10 @@ Feature: Testing route
 
   # @author zzhao@redhat.com
   # @case_id OCP-11036
-  @aws-ipi
-  @gcp-upi
-  @gcp-ipi
-  @4.10 @4.9
-  @aws-upi
-  @vsphere-ipi
-  @azure-ipi
+  @4.8 @4.7 @4.10 @4.9
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @upgrade-sanity
   Scenario: Set insecureEdgeTerminationPolicy to Redirect for passthrough route
     Given I have a project
     And I store an available router IP in the :router_ip clipboard
@@ -457,13 +419,10 @@ Feature: Testing route
 
   # @author zzhao@redhat.com
   # @case_id OCP-13839
-  @aws-ipi
-  @gcp-upi
-  @gcp-ipi
-  @4.10 @4.9
-  @aws-upi
-  @vsphere-ipi
-  @azure-ipi
+  @4.8 @4.7 @4.10 @4.9
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @upgrade-sanity
   Scenario: Set insecureEdgeTerminationPolicy to Redirect and Allow for reencrypt route
     Given I have a project
     And I store an available router IP in the :router_ip clipboard
@@ -481,10 +440,11 @@ Feature: Testing route
     #create reencrypt termination route
     Given I obtain test data file "routing/reencrypt/route_reencrypt_dest.ca"
     When I run the :create_route_reencrypt client command with:
-      | name       | reen                                                                             |
-      | service    | service-secure                                                                   |
+      | name       | reen                    |
+      | service    | service-secure          |
       | destcacert | route_reencrypt_dest.ca |
     Then the step should succeed
+    And I wait up to 60 seconds for a secure web server to become available via the "reen" route
     # Set insecureEdgeTerminationPolicy to Redirect
     When I run the :patch client command with:
       | resource      | route           |
@@ -523,13 +483,10 @@ Feature: Testing route
 
   # @author zzhao@redhat.com
   # @case_id OCP-13248
-  @aws-ipi
-  @gcp-upi
-  @gcp-ipi
-  @4.10 @4.9
-  @aws-upi
-  @vsphere-ipi
-  @azure-ipi
+  @4.8 @4.7 @4.10 @4.9
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @upgrade-sanity
   Scenario: The hostname should be converted to available route when met special character
     Given I have a project
     Given I obtain test data file "routing/service_unsecure.yaml"
@@ -553,8 +510,8 @@ Feature: Testing route
     Then the step should succeed
     Given I obtain test data file "routing/reencrypt/route_reencrypt_dest.ca"
     And I run the :create_route_reencrypt client command with:
-      | name       | reen.test                                                                        |
-      | service    | service-unsecure                                                                 |
+      | name       | reen.test               |
+      | service    | service-unsecure        |
       | destcacert | route_reencrypt_dest.ca |
     Then the step should succeed
     When I run the :get client command with:
@@ -568,13 +525,10 @@ Feature: Testing route
 
   # @author zzhao@redhat.com
   # @case_id OCP-13753
-  @aws-ipi
-  @gcp-upi
-  @gcp-ipi
-  @4.10 @4.9
-  @aws-upi
-  @vsphere-ipi
-  @azure-ipi
+  @4.8 @4.7 @4.10 @4.9
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @upgrade-sanity
   Scenario: Check the cookie if using secure mode when insecureEdgeTerminationPolicy to Redirect for edge/reencrypt route
     Given I have a project
     And I store an available router IP in the :router_ip clipboard
@@ -622,11 +576,12 @@ Feature: Testing route
     Then the step should succeed
     Given I obtain test data file "routing/reencrypt/route_reencrypt_dest.ca"
     When I run the :create_route_reencrypt client command with:
-      | name            | reen                                                                             |
-      | service         | service-secure                                                                   |
+      | name            | reen                    |
+      | service         | service-secure          |
       | destcacert      | route_reencrypt_dest.ca |
-      | insecure_policy | Redirect                                                                         |
+      | insecure_policy | Redirect                |
     Then the step should succeed
+    And I wait up to 60 seconds for a secure web server to become available via the "reen" route
     And I wait up to 20 seconds for the steps to pass:
     """
     When I execute on the pod:
@@ -651,13 +606,10 @@ Feature: Testing route
 
   # @author zzhao@redhat.com
   # @case_id OCP-14059
-  @aws-ipi
-  @gcp-upi
-  @gcp-ipi
-  @4.10 @4.9
-  @aws-upi
-  @vsphere-ipi
-  @azure-ipi
+  @4.8 @4.7 @4.10 @4.9
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @upgrade-sanity
   Scenario: Use the default destination CA of router if the route does not specify one for reencrypt route
     Given I have a project
     Given I obtain test data file "routing/reencrypt/reencrypt-without-all-cert.yaml"
@@ -671,13 +623,10 @@ Feature: Testing route
 
   # @author yadu@redhat.com
   # @case_id OCP-14678
-  @aws-ipi
-  @gcp-upi
-  @gcp-ipi
-  @4.10 @4.9
-  @aws-upi
-  @vsphere-ipi
-  @azure-ipi
+  @4.8 @4.7 @4.10 @4.9
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @upgrade-sanity
   Scenario: Only the host in whitelist could access the route - unsecure route
     Given I have a project
     And I have a header test service in the project
@@ -712,13 +661,10 @@ Feature: Testing route
 
   # @author zzhao@redhat.com
   # @case_id OCP-15976
-  @aws-ipi
-  @gcp-upi
-  @gcp-ipi
-  @4.10 @4.9
-  @aws-upi
-  @vsphere-ipi
-  @azure-ipi
+  @4.8 @4.7 @4.10 @4.9
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @upgrade-sanity
   Scenario: The edge route should support HSTS
     Given the master version >= "3.7"
     And I have a project
@@ -775,13 +721,10 @@ Feature: Testing route
 
   # @author zzhao@redhat.com
   # @case_id OCP-16368
-  @aws-ipi
-  @gcp-upi
-  @gcp-ipi
-  @4.10 @4.9
-  @aws-upi
-  @vsphere-ipi
-  @azure-ipi
+  @4.8 @4.7 @4.10 @4.9
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @upgrade-sanity
   Scenario: The reencrypt route should support HSTS
     Given the master version >= "3.7"
     And I have a project
@@ -792,7 +735,7 @@ Feature: Testing route
     And all pods in the project are ready
 
     Given I use the "service-secure" service
-    And I wait up to 20 seconds for a secure web server to become available via the "route-reencrypt" route
+    And I wait up to 60 seconds for a secure web server to become available via the "route-reencrypt" route
     Then the output should contain "Hello-OpenShift"
     And the expression should be true> @result[:headers]["strict-transport-security"] == ["max-age=100;includeSubDomains;preload"]
 

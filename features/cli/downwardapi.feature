@@ -2,13 +2,10 @@ Feature: Downward API
 
   # @author qwang@redhat.com
   # @case_id OCP-10707
-  @aws-ipi
-  @gcp-upi
-  @gcp-ipi
-  @4.10 @4.9
-  @aws-upi
-  @vsphere-ipi
-  @azure-ipi
+  @4.8 @4.7 @4.10 @4.9
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @upgrade-sanity
   Scenario: Pods can get IPs via downward API under race condition
     Given I have a project
     Given I obtain test data file "downwardapi/ocp10707/pod-downwardapi-env.yaml"
@@ -23,13 +20,10 @@ Feature: Downward API
   # @author cryan@redhat.com
   # @case_id OCP-10628
   @smoke
-  @aws-ipi
-  @gcp-upi
-  @gcp-ipi
-  @4.10 @4.9
-  @aws-upi
-  @vsphere-ipi
-  @azure-ipi
+  @4.8 @4.7 @4.10 @4.9
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @upgrade-sanity
   Scenario: downward api pod name and pod namespace as env variables
     Given I have a project
     Given I obtain test data file "downwardapi/ocp10628/downward-example.yaml"
@@ -47,13 +41,10 @@ Feature: Downward API
   # @author qwang@redhat.com
   # @case_id OCP-10708
   @smoke
-  @aws-ipi
-  @gcp-upi
-  @gcp-ipi
-  @4.10 @4.9
-  @aws-upi
-  @vsphere-ipi
-  @azure-ipi
+  @4.8 @4.7 @4.10 @4.9
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @upgrade-sanity
   Scenario: Container consume infomation from the downward API using a volume plugin
     Given I have a project
     Given I obtain test data file "downwardapi/pod-dapi-volume.yaml"

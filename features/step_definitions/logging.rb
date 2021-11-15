@@ -224,6 +224,7 @@ end
 
 Given /^I wait until fluentd is ready$/ do
   step %Q/logging collector name is stored in the :collector_name clipboard/
+  step %Q/I wait for the "<%= cb.collector_name %>" daemon_set to appear up to 300 seconds/
   step %Q/#{daemon_set("#{cb.collector_name}").replica_counters[:desired]} pods become ready with labels:/, table(%{
     | logging-infra=#{cb.collector_name} |
   })
@@ -396,7 +397,7 @@ Given /^(cluster-logging|elasticsearch-operator) channel name is stored in the#{
     when '4.9'
       cb[cb_name] = "stable-5.2"
     when '4.10'
-      cb[cb_name] = "stable-5.3"
+      cb[cb_name] = "stable"
     else
       cb[cb_name] = "stable"
     end

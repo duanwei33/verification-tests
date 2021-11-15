@@ -37,7 +37,7 @@ Feature: CSI testing related feature
 
   # @author chaoyang@redhat.com
   @admin
-  @4.10 @4.9
+  @4.8 @4.7 @4.10 @4.9
   Scenario Outline: Configure 'Retain' reclaim policy
     Given I have a project
     And admin clones storage class "sc-<%= project.name %>" from "<sc_name>" with:
@@ -75,6 +75,9 @@ Feature: CSI testing related feature
       | sc_name      |
       | gp2-csi      | # @case_id OCP-24575
 
+    @openstack-ipi
+    @openstack-upi
+    @upgrade-sanity
     Examples:
       | sc_name      |
       | standard-csi | # @case_id OCP-37572
@@ -83,7 +86,7 @@ Feature: CSI testing related feature
   # @author wduan@redhat.com
   @admin
   @smoke
-  @4.10 @4.9
+  @4.8 @4.7 @4.10 @4.9
   Scenario Outline: CSI dynamic provisioning with default fstype
     Given I have a project
     Given I obtain test data file "storage/misc/pvc.json"
@@ -153,6 +156,9 @@ Feature: CSI testing related feature
     Then the step should succeed
     And the output should contain "test"
 
+    @openstack-ipi
+    @openstack-upi
+    @upgrade-sanity
     Examples:
       | sc_name      |
       | standard-csi | # @case_id OCP-37562
@@ -161,7 +167,7 @@ Feature: CSI testing related feature
   # @author wduan@redhat.com
   @admin
   @smoke
-  @4.10 @4.9
+  @4.8 @4.7 @4.10 @4.9
   Scenario Outline: CSI dynamic provisioning with fstype
     Given I have a project
     When admin clones storage class "sc-<%= project.name %>" from "<sc_name>" with:
@@ -202,6 +208,9 @@ Feature: CSI testing related feature
     Then the step should succeed
     And the output should contain "Hello OpenShift Storage"
 
+    @openstack-ipi
+    @openstack-upi
+    @upgrade-sanity
     Examples:
       | sc_name       | fstype |
       | standard-csi  | xfs    | # @case_id OCP-37560
@@ -209,7 +218,7 @@ Feature: CSI testing related feature
 
 
   # @author wduan@redhat.com
-  @4.10 @4.9
+  @4.8 @4.7 @4.10 @4.9
   Scenario Outline: CSI dynamic provisioning with block
     Given I have a project
     Given I obtain test data file "storage/misc/pvc.json"
@@ -243,9 +252,15 @@ Feature: CSI testing related feature
     Then the step should succeed
     And the output should contain "test data"
 
+    @openstack-ipi
+    @openstack-upi
     Examples:
       | sc_name      |
       | standard-csi | # @case_id OCP-37564
+
+    @upgrade-sanity
+    Examples:
+      | sc_name      |
       | standard-csi | # @case_id OCP-37511
 
 
@@ -300,7 +315,7 @@ Feature: CSI testing related feature
 
   # @author wduan@redhat.com
   @admin
-  @4.10 @4.9
+  @4.8 @4.7 @4.10 @4.9
   Scenario Outline: Check CSI Driver Operator installation
     When I run the :get admin command with:
       | resource | clusteroperator/storage                                                            |
@@ -331,6 +346,8 @@ Feature: CSI testing related feature
     Given "<deployment_controller>" deployment becomes ready in the "openshift-cluster-csi-drivers" project
     Given "<daemonset_node>" daemonset becomes ready in the "openshift-cluster-csi-drivers" project
 
+    @openstack-ipi
+    @openstack-upi
     Examples:
       | provisioner              | sc_name      | deployment_operator                  | deployment_controller                  | daemonset_node                   |
       | cinder.csi.openstack.org | standard-csi | openstack-cinder-csi-driver-operator | openstack-cinder-csi-driver-controller | openstack-cinder-csi-driver-node | # @case_id OCP-37557
@@ -341,6 +358,7 @@ Feature: CSI testing related feature
       | provisioner              | sc_name      | deployment_operator                  | deployment_controller                  | daemonset_node                   |
       | ebs.csi.aws.com          | gp2-csi      | aws-ebs-csi-driver-operator          | aws-ebs-csi-driver-controller          | aws-ebs-csi-driver-node          | # @case_id OCP-34144
 
+    @upgrade-sanity
     Examples:
       | provisioner              | sc_name      | deployment_operator                  | deployment_controller                  | daemonset_node                   |
       | pd.csi.storage.gke.io    | standard-csi | gcp-pd-csi-driver-operator           | gcp-pd-csi-driver-controller           | gcp-pd-csi-driver-node           | # @case_id OCP-37474

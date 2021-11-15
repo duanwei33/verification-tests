@@ -6,9 +6,6 @@ Feature: cluster log forwarder features
   @admin
   @destructive
   @commonlogging
-  @gcp-upi
-  @gcp-ipi
-  @aws-upi
   Scenario: ClusterLogForwarder `default` behavior testing
     Given the master version >= "4.6"
     # create project to generate logs
@@ -44,7 +41,7 @@ Feature: cluster log forwarder features
     Then the step should succeed
     And I wait for the "instance" cluster_log_forwarder to appear
     Given 10 seconds have passed
-    And <%= daemon_set("<%= cb.collector_name %>").replica_counters[:desired] %> pods become ready with labels:
+    And <%= daemon_set(cb.collector_name).replica_counters[:desired] %> pods become ready with labels:
       | logging-infra=<%= cb.collector_name %> |
     Given I wait up to 300 seconds for the steps to pass:
     """
@@ -93,7 +90,7 @@ Feature: cluster log forwarder features
       | f | clusterlogforwarder.yaml |
     Then the step should succeed
     Given 10 seconds have passed
-    And <%= daemon_set("<%= cb.collector_name %>").replica_counters[:desired] %> pods become ready with labels:
+    And <%= daemon_set(cb.collector_name).replica_counters[:desired] %> pods become ready with labels:
       | logging-infra=<%= cb.collector_name %> |
     Given I wait up to 300 seconds for the steps to pass:
     """
@@ -134,9 +131,6 @@ Feature: cluster log forwarder features
   # @case_id OCP-29843
   @admin
   @destructive
-  @gcp-upi
-  @gcp-ipi
-  @aws-upi
   Scenario: ClusterLogForwarder: Forward logs to fluentd as insecure
     Given I switch to the first user
     And I have a project
@@ -181,9 +175,6 @@ Feature: cluster log forwarder features
   # @author qitang@redhat.com
   @admin
   @destructive
-  @gcp-upi
-  @gcp-ipi
-  @aws-upi
   Scenario Outline: ClusterLogForwarder: Forward logs to fluentd as secure
     Given I switch to the first user
     And I have a project
@@ -224,6 +215,8 @@ Feature: cluster log forwarder features
       | infra.log           |
       | infra-container.log |
     """
+    @upgrade-sanity
+    @4.7
     Examples:
       | auth_type         |
       | mTLS_share        | # @case_id OCP-29844
@@ -234,9 +227,6 @@ Feature: cluster log forwarder features
   # @author qitang@redhat.com
   @admin
   @destructive
-  @gcp-upi
-  @gcp-ipi
-  @aws-upi
   Scenario Outline: Forward logs with tags
     Given I switch to the first user
     And I create a project with non-leading digit name
@@ -295,9 +285,6 @@ Feature: cluster log forwarder features
   # @case_id OCP-33627
   @admin
   @destructive
-  @gcp-upi
-  @gcp-ipi
-  @aws-upi
   Scenario: Forward logs to remote-syslog - config error
     Given the master version >= "4.6"
     Given I switch to cluster admin pseudo user
@@ -313,9 +300,6 @@ Feature: cluster log forwarder features
   # @author gkarager@redhat.com
   @admin
   @destructive
-  @gcp-upi
-  @gcp-ipi
-  @aws-upi
   Scenario Outline: Forward logs to remote-syslog
     Given the master version >= "4.6"
     Given I switch to the first user
@@ -357,6 +341,8 @@ Feature: cluster log forwarder features
       | infra-container.log |
     """
 
+    @upgrade-sanity
+    @4.7
     Examples:
       | file                  | protocol |
       | rsys_clf_RFC3164.yaml | tls      | # @case_id OCP-32643
@@ -367,9 +353,8 @@ Feature: cluster log forwarder features
   # @case_id OCP-32697
   @admin
   @destructive
-  @gcp-upi
-  @gcp-ipi
-  @aws-upi
+  @upgrade-sanity
+  @4.7
   Scenario: Forward logs to different kafka topics
     Given I switch to the first user
     And I create a project with non-leading digit name
@@ -521,6 +506,8 @@ Feature: cluster log forwarder features
   @admin
   @destructive
   @4.10 @4.9
+  @azure-ipi @openstack-ipi @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
+  @azure-upi @aws-upi @openstack-upi @vsphere-upi @gcp-upi
   Scenario: Send logs to both external fluentd and internalES
     #Creating secure fluentd receiver
     Given I switch to cluster admin pseudo user

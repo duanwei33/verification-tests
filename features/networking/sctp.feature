@@ -32,7 +32,7 @@ Feature: SCTP related scenarios
       | ["spec"]["nodeName"]      | <%= cb.workers[1].name %> |
     Then the step should succeed
     And the pod named "sctpclient" becomes ready
-   
+
     And I wait up to 60 seconds for the steps to pass:
     """
     # sctpserver pod start to wait for sctp traffic
@@ -42,11 +42,11 @@ Feature: SCTP related scenarios
       | oc_opts_end      |                             |
       | exec_command     | bash                        |
       | exec_command_arg | -c                          |
-      | exec_command_arg | /usr/bin/nc -l 30102 --sctp |
+      | exec_command_arg | ncat -l 30102 --sctp |
     Then the step should succeed
-    # sctpclient pod start to send sctp traffic   
+    # sctpclient pod start to send sctp traffic
     When I execute on the "sctpclient" pod:
-      | bash | -c | echo test-openshift \| nc -v <%= cb.serverpod_ip %> 30102 --sctp |
+      | bash | -c | echo test-openshift \| ncat -v <%= cb.serverpod_ip %> 30102 --sctp |
     Then the step should succeed
     And the output should contain:
       | Connected to <%= cb.serverpod_ip %>:30102 |
@@ -58,6 +58,8 @@ Feature: SCTP related scenarios
   @admin
   @destructive
   @4.10 @4.9
+  @azure-ipi @openstack-ipi @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
+  @azure-upi @aws-upi @openstack-upi @vsphere-upi @gcp-upi
   Scenario: Expose SCTP ClusterIP Services
     Given I store the ready and schedulable workers in the :workers clipboard
     And I install machineconfigs load-sctp-module
@@ -70,7 +72,7 @@ Feature: SCTP related scenarios
     Then the outputs should contain "Ready"
     Given I check load-sctp-module in all workers
     """
- 
+
     Given I obtain test data file "networking/sctp/sctpserver.yaml"
     When I run oc create as admin over "sctpserver.yaml" replacing paths:
       | ["metadata"]["namespace"] | <%= project.name %>       |
@@ -101,11 +103,11 @@ Feature: SCTP related scenarios
       | oc_opts_end      |                             |
       | exec_command     | bash                        |
       | exec_command_arg | -c                          |
-      | exec_command_arg | /usr/bin/nc -l 30102 --sctp |
+      | exec_command_arg | ncat -l 30102 --sctp        |
     Then the step should succeed
-    # sctpclient pod start to send sctp traffic   
+    # sctpclient pod start to send sctp traffic
     When I execute on the "sctpclient" pod:
-      | bash | -c | echo test-openshift \| nc -v <%= cb.service_ip %> 30102 --sctp |
+      | bash | -c | echo test-openshift \| ncat -v <%= cb.service_ip %> 30102 --sctp |
     Then the step should succeed
     And the output should contain:
       | Connected to <%= cb.service_ip %>:30102 |
@@ -117,6 +119,8 @@ Feature: SCTP related scenarios
   @admin
   @destructive
   @4.10 @4.9
+  @azure-ipi @openstack-ipi @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
+  @azure-upi @aws-upi @openstack-upi @vsphere-upi @gcp-upi
   Scenario: Expose SCTP NodePort Services
     Given I store the ready and schedulable workers in the :workers clipboard
     And the Internal IP of node "<%= cb.workers[1].name %>" is stored in the :worker1_ip clipboard
@@ -161,11 +165,11 @@ Feature: SCTP related scenarios
       | oc_opts_end      |                             |
       | exec_command     | bash                        |
       | exec_command_arg | -c                          |
-      | exec_command_arg | /usr/bin/nc -l 30102 --sctp |
+      | exec_command_arg | ncat -l 30102 --sctp        |
     Then the step should succeed
     # sctpclient pod start to send sctp traffic on worknode:port
     When I execute on the "sctpclient" pod:
-      | bash | -c | echo test-openshift \| nc -v <%= cb.worker1_ip %> <%= cb.nodeport %>  --sctp |
+      | bash | -c | echo test-openshift \| ncat -v <%= cb.worker1_ip %> <%= cb.nodeport %>  --sctp |
     Then the step should succeed
     And the output should contain:
       | Connected to <%= cb.worker1_ip %>:<%= cb.nodeport %> |
@@ -178,6 +182,8 @@ Feature: SCTP related scenarios
   @admin
   @destructive
   @4.10 @4.9
+  @azure-ipi @openstack-ipi @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
+  @azure-upi @aws-upi @openstack-upi @vsphere-upi @gcp-upi
   Scenario: Networkpolicy allow SCTP Client
     Given I store the ready and schedulable workers in the :workers clipboard
     And I install machineconfigs load-sctp-module
@@ -215,11 +221,11 @@ Feature: SCTP related scenarios
       | oc_opts_end      |                             |
       | exec_command     | bash                        |
       | exec_command_arg | -c                          |
-      | exec_command_arg | /usr/bin/nc -l 30102 --sctp |
+      | exec_command_arg | ncat -l 30102 --sctp        |
     Then the step should succeed
-    # sctpclient pod start to send sctp traffic 
+    # sctpclient pod start to send sctp traffic
     When I execute on the "sctpclient" pod:
-      | bash | -c | echo test-openshift \| nc -v <%= cb.serverpod_ip %> 30102 --sctp |
+      | bash | -c | echo test-openshift \| ncat -v <%= cb.serverpod_ip %> 30102 --sctp |
     Then the step should succeed
     And the output should contain:
       | Connected to <%= cb.serverpod_ip %> |
@@ -243,10 +249,10 @@ Feature: SCTP related scenarios
       | oc_opts_end      |                             |
       | exec_command     | bash                        |
       | exec_command_arg | -c                          |
-      | exec_command_arg | /usr/bin/nc -l 30102 --sctp |
+      | exec_command_arg | ncat -l 30102 --sctp        |
     Then the step should succeed
     When I execute on the "sctpclient" pod:
-      | bash | -c | echo test-openshift \| nc -v <%= cb.serverpod_ip %> 30102 --sctp |
+      | bash | -c | echo test-openshift \| ncat -v <%= cb.serverpod_ip %> 30102 --sctp |
     Then the step should fail
     """
 
@@ -266,11 +272,11 @@ Feature: SCTP related scenarios
       | oc_opts_end      |                             |
       | exec_command     | bash                        |
       | exec_command_arg | -c                          |
-      | exec_command_arg | /usr/bin/nc -l 30102 --sctp |
+      | exec_command_arg | ncat -l 30102 --sctp        |
     Then the step should succeed
-    # sctpclient pod start to send sctp traffic  
+    # sctpclient pod start to send sctp traffic
     When I execute on the "sctpclient" pod:
-      | bash | -c | echo test-openshift \| nc -v <%= cb.serverpod_ip %> 30102 --sctp |
+      | bash | -c | echo test-openshift \| ncat -v <%= cb.serverpod_ip %> 30102 --sctp |
     Then the step should succeed
     And the output should contain:
       | Connected to <%= cb.serverpod_ip %> |

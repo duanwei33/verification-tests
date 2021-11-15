@@ -2,7 +2,7 @@ Feature: Volume snapshot test
 
   # @author wduan@redhat.com
   @admin
-  @4.10 @4.9
+  @4.8 @4.7 @4.10 @4.9
   Scenario Outline: Volume snapshot create and restore test
     Given I have a project  
     Given I obtain test data file "storage/misc/pvc.json"
@@ -53,15 +53,28 @@ Feature: Volume snapshot test
     Then the step should succeed
     And the output should contain "snapshot test"
     
+    @aws-ipi
+    @aws-upi
     Examples:
       | csi-sc       |
       | gp2-csi      | # @case_id OCP-27727
-      | standard-csi | # @case_id OCP-37568
+
+    @azure-ipi
+    @azure-upi
+    Examples:
+      | csi-sc       |
       | managed-csi  | # @case_id OCP-41449
+
+    @openstack-ipi
+    @openstack-upi
+    @upgrade-sanity
+    Examples:
+      | csi-sc       |
+      | standard-csi | # @case_id OCP-37568
 
   # @author wduan@redhat.com
   @admin
-  @4.10 @4.9
+  @4.8 @4.7 @4.10 @4.9
   Scenario Outline: Volume snapshot create and restore test with block
     Given I have a project
     Given I obtain test data file "storage/misc/pvc.json"
@@ -121,7 +134,9 @@ Feature: Volume snapshot test
     Then the step should succeed
     And the output should contain "test data"
 
+    @openstack-ipi
+    @openstack-upi
+    @upgrade-sanity
     Examples:
-    | csi-sc       |
-    | gp2-csi      | # @case_id OCP-27727
-    | standard-csi | # @case_id OCP-37569
+      | csi-sc       |
+      | standard-csi | # @case_id OCP-37569

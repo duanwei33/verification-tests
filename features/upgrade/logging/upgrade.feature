@@ -2,9 +2,13 @@ Feature: Logging upgrading related features
 
   # @author qitang@redhat.com
   @admin
+  @console
   @destructive
   @upgrade-prepare
   @users=upuser1,upuser2
+  @4.8 @4.10 @4.9
+  @azure-ipi @openstack-ipi @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
+  @azure-upi @aws-upi @openstack-upi @vsphere-upi @gcp-upi
   Scenario: Cluster logging checking during cluster upgrade - prepare
     Given I switch to the first user
     Given I have "json" log pod in project "logging-upg-prep-1"
@@ -36,8 +40,13 @@ Feature: Logging upgrading related features
   # @case_id OCP-22911
   # @author qitang@redhat.com
   @admin
+  @console
+  @destructive
   @upgrade-check
   @users=upuser1,upuser2
+  @4.8 @4.10 @4.9
+  @azure-ipi @openstack-ipi @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
+  @azure-upi @aws-upi @openstack-upi @vsphere-upi @gcp-upi
   Scenario: Cluster logging checking during cluster upgrade
     Given I switch to the first user
     Given I create a project with non-leading digit name

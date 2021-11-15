@@ -3,6 +3,9 @@ Feature: web console related upgrade check
   @console
   @upgrade-prepare
   @users=upuser1,upuser2
+  @4.8 @4.10 @4.9
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   Scenario: check console accessibility - prepare
     Given I switch to the first user
     When I run the :new_project client command with:
@@ -39,7 +42,7 @@ Feature: web console related upgrade check
     Then the step should succeed
     When I perform the :check_resource_item_name web action with:
       | resource_name | hello-daemonset |
-    Then the step should succeed    
+    Then the step should succeed
 
   # @author yanpzhan@redhat.com
   # @case_id OCP-22597
@@ -47,13 +50,9 @@ Feature: web console related upgrade check
   @admin
   @console
   @users=upuser1,upuser2
-  @aws-ipi
-  @aws-upi
-  @gcp-upi
-  @gcp-ipi
-  @4.10 @4.9
-  @vsphere-ipi
-  @azure-ipi
+  @4.8 @4.10 @4.9
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   Scenario: check console accessibility
     Given the first user is cluster-admin
     Given I open admin console in a browser

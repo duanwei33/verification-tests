@@ -4,11 +4,9 @@ Feature: Machine features testing
   # @case_id OCP-21196
   @smoke
   @admin
-  @aws-ipi
-  @gcp-ipi
-  @4.10 @4.9
-  @vsphere-ipi
-  @azure-ipi
+  @4.8 @4.7 @4.10 @4.9
+  @vsphere-ipi @openstack-ipi @gcp-ipi @azure-ipi @aws-ipi
+  @upgrade-sanity
   Scenario: Machines should be linked to nodes
     Given I have an IPI deployment
     Then the machines should be linked to nodes
@@ -18,6 +16,8 @@ Feature: Machine features testing
   @smoke
   @admin
   @4.10 @4.9
+  @azure-ipi @openstack-ipi @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
+  @azure-upi @aws-upi @openstack-upi @vsphere-upi @gcp-upi
   Scenario: machine-api clusteroperator should be in Available state
     Given evaluation of `cluster_operator('machine-api').condition(type: 'Available')` is stored in the :co_available clipboard
     Then the expression should be true> cb.co_available["status"]=="True"
@@ -35,13 +35,10 @@ Feature: Machine features testing
   # @case_id OCP-37706
   @smoke
   @admin
-  @aws-ipi
-  @gcp-upi
-  @gcp-ipi
-  @4.10 @4.9
-  @aws-upi
-  @vsphere-ipi
-  @azure-ipi
+  @4.8 @4.7 @4.10 @4.9
+  @vsphere-ipi @openstack-ipi @gcp-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @upgrade-sanity
   Scenario: Baremetal clusteroperator should be disabled in any deployment that is not baremetal
     Given evaluation of `cluster_operator('baremetal').condition(type: 'Disabled')` is stored in the :co_disabled clipboard
     Then the expression should be true> cb.co_disabled["status"]=="True"
@@ -50,11 +47,9 @@ Feature: Machine features testing
   # @case_id OCP-25436
   @admin
   @destructive
-  @aws-ipi
-  @gcp-ipi
-  @4.10 @4.9
-  @vsphere-ipi
-  @azure-ipi
+  @4.8 @4.7 @4.10 @4.9
+  @vsphere-ipi @openstack-ipi @gcp-ipi @azure-ipi @aws-ipi
+  @upgrade-sanity
   Scenario: Scale up and scale down a machineSet
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
@@ -74,11 +69,7 @@ Feature: Machine features testing
 
   # @author jhou@redhat.com
   @admin
-  @aws-ipi
-  @gcp-ipi
   @4.10 @4.9
-  @vsphere-ipi
-  @azure-ipi
   Scenario Outline: Metrics is exposed on https
     Given I switch to cluster admin pseudo user
     And I use the "openshift-monitoring" project
@@ -94,6 +85,7 @@ Feature: Machine features testing
       | exec_command_arg | curl -v -s -k -H "Authorization: Bearer <%= cb.token %>" <url> |
     Then the step should succeed
 
+    @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
     Examples:
       | url                                                                          |
       | https://machine-api-operator.openshift-machine-api.svc:8443/metrics          | # @case_id OCP-25652
@@ -104,11 +96,8 @@ Feature: Machine features testing
   # @case_id OCP-25608
   @admin
   @destructive
-  @aws-ipi
-  @gcp-ipi
   @4.10 @4.9
-  @vsphere-ipi
-  @azure-ipi
+  @vsphere-ipi @openstack-ipi @gcp-ipi @azure-ipi @aws-ipi
   Scenario: Machine should have immutable field providerID and nodeRef
     Given I have an IPI deployment
     Given I store the last provisioned machine in the :machine clipboard
@@ -160,6 +149,7 @@ Feature: Machine features testing
   @admin
   @destructive
   @4.10 @4.9
+  @azure-ipi @openstack-ipi @vsphere-ipi @gcp-ipi @aws-ipi
   Scenario: Scaling a machineset with providerSpec.publicIp set to true
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
@@ -177,6 +167,7 @@ Feature: Machine features testing
   @admin
   @destructive
   @4.10 @4.9
+  @azure-ipi @openstack-ipi @vsphere-ipi @gcp-ipi @aws-ipi
   Scenario: [MAO] Reconciling machine taints with nodes
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
@@ -208,10 +199,7 @@ Feature: Machine features testing
   # @author zhsun@redhat.com
   @admin
   @destructive
-  @aws-ipi
-  @gcp-ipi
   @4.10 @4.9
-  @azure-ipi
   Scenario Outline: Required configuration should be added to the ProviderSpec to enable spot instances
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
@@ -291,10 +279,19 @@ Feature: Machine features testing
       | DeletionCandidateOfClusterAutoscaler |
       | ToBeDeletedByClusterAutoscaler       |
 
+    @aws-ipi
     Examples:
       | iaas_type | machineset_name        |
       | aws       | machineset-clone-29199 | # @case_id OCP-29199
+
+    @gcp-ipi
+    Examples:
+      | iaas_type | machineset_name        |
       | gcp       | machineset-clone-32126 | # @case_id OCP-32126
+
+    @azure-ipi
+    Examples:
+      | iaas_type | machineset_name        |
       | azure     | machineset-clone-33040 | # @case_id OCP-33040
 
   # @author zhsun@redhat.com
@@ -302,6 +299,7 @@ Feature: Machine features testing
   @admin
   @destructive
   @4.10 @4.9
+  @azure-ipi @openstack-ipi @vsphere-ipi @gcp-ipi @aws-ipi
   Scenario: Labels specified in a machineset should propagate to nodes
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
@@ -329,7 +327,6 @@ Feature: Machine features testing
   # @author miyadav@redhat.com
   @admin
   @destructive
-  @aws-ipi
   @4.10 @4.9
   Scenario Outline: Implement defaulting machineset values for AWS
     Given I have an IPI deployment
@@ -370,6 +367,7 @@ Feature: Machine features testing
     And the output should contain:
       | <Validation> |
 
+    @aws-ipi
     Examples:
       | name                    | file_name                 | Validation                    |
       | default-valued-32269    | ms_default_values.yaml    | Placement                     | # @case_id OCP-32269
@@ -381,6 +379,7 @@ Feature: Machine features testing
   @admin
   @destructive
   @4.10 @4.9
+  @gcp-ipi
   Scenario: Implement defaulting machineset values for GCP
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
@@ -416,7 +415,6 @@ Feature: Machine features testing
   @admin
   @destructive
   @4.10 @4.9
-  @azure-ipi
   Scenario Outline: Implement defaulting machineset values for azure
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
@@ -451,6 +449,7 @@ Feature: Machine features testing
     And the output should contain:
       | <Validation> |
 
+    @azure-ipi
     Examples:
       | name                    | file_name               | Validation                |
       | default-valued-33058    | ms_default_values.yaml  | Public IP                 | # @case_id OCP-33058
@@ -564,7 +563,6 @@ Feature: Machine features testing
     Examples:
       | name                         | template                           | diskGiB           |
       | default-valued-33380         | <%= cb.template %>                 | <%= cb.diskGiB %> | # @case_id OCP-33380
-    @vsphere-ipi
     Examples:
       | name                         | template                           | diskGiB           |
       | default-valued-windows-35421 | openshift-qe-template-windows-2019 | 135               | # @case_id OCP-35421
