@@ -530,6 +530,7 @@ Given /^I have a iSCSI setup in the environment$/ do
     logger.warn "broken iSCSI pod, will try to recreate keeping other config"
     @result = admin.cli_exec(:delete, n: _project.name, object_type: "pod", object_name_or_id: _pod.name, force: "true")
     raise "could not delete broken iSCSI pod" unless @result[:success]
+    step %Q{I ensure "{#_pod.name}" pod is deleted from the "{#_project.name}" project}
     @result = admin.cli_exec(:create, n: _project.name, f: "#{BushSlicer::HOME}/testdata/storage/iscsi/iscsi-target.json")
     raise "could not create iSCSI pod" unless @result[:success]
   else
