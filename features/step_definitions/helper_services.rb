@@ -528,7 +528,7 @@ Given /^I have a iSCSI setup in the environment$/ do
     logger.info "found existing iSCSI pod, skipping config"
   elsif _pod.exists?(user: admin, quiet: true)
     logger.warn "broken iSCSI pod, will try to recreate keeping other config"
-    step %Q{admin ensures "{#_pod.name}" pod is deleted from the "{#_project.name}" project}
+    step %Q{admin ensures _pod.name pod is deleted from the _project.name project}
     @result = admin.cli_exec(:create, n: _project.name, f: "#{BushSlicer::HOME}/testdata/storage/iscsi/iscsi-target.json")
     raise "could not create iSCSI pod" unless @result[:success]
   else
